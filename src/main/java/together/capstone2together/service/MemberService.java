@@ -76,17 +76,8 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
         member.setPassword(passwordEncoder.encode(newPassword));
     }
     public Member findById(String id){
-        return memberRepository.findById(id).get();
+        Optional<Member> findOne = memberRepository.findById(id);
+        if(findOne.isEmpty()) throw new NoResultException("해당 회원은 존재하지 않습니다.");
+        return findOne.get();
     }
-//    @Transactional //관심 태그 변경
-//    public void changeTags(Member member, List<Tag2> tag2List){ member.setTag2List(tag2List);}
-
-    //{"tags": ["기술", "예술", "여행"]}
-//    @Transactional //관심 태그 변경
-//    public void changeTagList(String memberId, TagListDto dto) {
-//        List<Tag2> tag2List = dto.getTag2List();
-//        Member findOne = findById(memberId);
-//        findOne.getTag2List().clear();
-//        findOne.setTag2List(tag2List);
-//    }
 }
