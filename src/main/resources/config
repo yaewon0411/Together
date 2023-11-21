@@ -1,0 +1,5 @@
+[DEFAULT]
+user=ocid1.user.oc1..aaaaaaaa3gox7ngf4r5ydk25zmticv7jmutsxqtqnkosqotnnh2ipsi6mufq
+fingerprint=fc:14:bc:3c:2c:c2:3c:0a:27:61:0d:f8:0e:e2:da:de
+tenancy=ocid1.tenancy.oc1..aaaaaaaaf5yxt3nfdulzpkxhjh3jxezqd5dgqnzmut23v7xdi7viuczphq3q
+region=ap-chuncheon-1

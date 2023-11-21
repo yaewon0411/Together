@@ -1,0 +1,126 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.4'
+	id 'io.spring.dependency-management' version '1.1.3'
+}
+
+group = 'together'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	all*.exclude module : 'spring-boot-starter-logging'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	//implementation 'javax.xml.bind:jaxb-api'
+	//implementation 'jakarta.xml.bind:jaxb-runtime'
+	implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+
+	implementation 'org.slf4j:slf4j-simple:1.7.25'
+	implementation 'org.slf4j:slf4j-api:1.7.25'
+	//common-logging 제거해서 생긴 오류 제거를 위해 추가
+	implementation 'org.slf4j:jcl-over-slf4j:1.7.25'
+
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+	implementation 'org.mariadb.jdbc:mariadb-java-client'
+
+
+
+	//오라클 클라우드 접속 라이브러리
+	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+	implementation 'com.oracle.database.security:osdt_cert'
+	implementation 'com.oracle.database.security:oraclepki'
+	implementation 'com.oracle.database.security:osdt_core'
+
+	//oci 최근은 3.25.1로 해봄 -> 3.1.0으로 수정할것
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-workrequests', version: '3.1.0' //2.8.1
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-filestorage', version: '3.1.0'
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-audit', version: '3.1.0'
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-core', version: '3.1.0'
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-database', version: '3.1.0'
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '3.1.0'
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-objectstorage-generated', version: '3.1.0'
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common-httpclient-jersey3', version: '3.1.0' //3.25.1
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-objectstorage-extensions', version: '3.1.0'//1.8.0
+
+
+	//==============stack overflow 참고=====================
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-addons-resteasy-client-configurator:3.1.0'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:3.1.0'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey:3.1.0'
+
+
+	//======================================================
+
+
+
+
+	implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '3.1.3' //원래 jersey 2.34으로 통일
+	implementation group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '3.1.3'
+	implementation group: 'org.glassfish.jersey.ext', name: 'jersey-entity-filtering', version: '3.1.3'
+	implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: '3.1.3'
+	implementation group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '3.1.3'
+	implementation 'org.glassfish.jersey.containers:jersey-container-servlet:3.1.3' //2.34 	//에러 발생해서 추가
+
+
+
+	//javax-annotation/Priority 에러 발생해서 추가
+
+//	implementation 'javax.annotation:javax.annotation-api:1.3.2'
+//	implementation 'javax.activation:javax.activation-api:1.2.0'
+	implementation 'jakarta.activation:jakarta.activation-api:2.1.2'
+	implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+
+
+	//Exception in thread "main" java.lang.NoClassDefFoundError: javax/ws/rs/core/Configurable 때문에 추가
+	//implementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.1.0' //2.1
+	implementation 'javax.ws.rs:javax.ws.rs-api:2.1.1' //2.1.1 원래 이거...
+
+	//implementation 'com.oracle.oci.sdk:oci-java-sdk:3.25.3' //10월 6일 추가
+//	implementation group: 'com.oracle.oci.sdk', name:'oci-java-sdk', version: '3.12.0'
+//
+	//implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.25.3' //3.12.0, 3.25.1
+
+	//추가
+//	implementation 'org.glassfish.jersey.inject:jersey-hk2'
+//	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.2'
+
+
+}
+//stack overflow 참고해서 의존성 관리 추가
+dependencyManagement {
+	imports {
+		mavenBom 'com.oracle.oci.sdk:oci-java-sdk-bom:3.1.0'
+	}
+
+	//enforcedPlatform("com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey:3.1.0")
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
