@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import together.capstone2together.domain.Item;
 import together.capstone2together.domain.ItemTag;
 import together.capstone2together.domain.Tag;
+import together.capstone2together.dto.ItemIdDto;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,8 +80,8 @@ public class ItemTagRepository {
                 .setParameter("tag",tag)
                 .getResultList();
     }
-    public List<Item> findItemByItemTag(ItemTag itemTag){
-        return em.createQuery("select i from ItemTag it left join fetch it.item i where i = :item",Item.class)
+    public List<ItemIdDto> findItemByItemTag(ItemTag itemTag){
+        return em.createQuery("select new together.capstone2together.dto.ItemIdDto(i.id) from ItemTag it left join it.item i where i = :item", ItemIdDto.class)
                 .setParameter("item",itemTag.getItem())
                 .getResultList();
     }

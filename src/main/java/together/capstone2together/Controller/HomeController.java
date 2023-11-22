@@ -30,7 +30,6 @@ public class HomeController {
     private final SurveyService surveyService;
     private final QuestionService questionService;
     private final PickService pickService;
-    private final MemberTagService memberTagService;
     private final TagService tagService;
 
     @GetMapping

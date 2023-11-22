@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.*;
+import together.capstone2together.dto.ItemIdDto;
 import together.capstone2together.dto.SearchDto;
 import together.capstone2together.repository.ItemTagRepository;
 
@@ -20,6 +21,7 @@ public class ItemTagService {
 
     private final ItemTagRepository itemTagRepository;
     private final SubService subService;
+    private final ItemService itemService;
 
     private final RoomService roomService;
     @Transactional
@@ -37,9 +39,10 @@ public class ItemTagService {
         List<ItemTag> findList = itemTagRepository.findByTagList(taglist);
         JSONArray array = new JSONArray();
         for (ItemTag itemTag : findList) {
-            List<Item> findItem = itemTagRepository.findItemByItemTag(itemTag);
-            for (Item item : findItem) {
-                Room findRoom = roomService.findById(item.getId());
+            List<ItemIdDto> itemIdList = itemTagRepository.findItemByItemTag(itemTag);
+            for (ItemIdDto dto: itemIdList) {
+                Room findRoom = roomService.findById(dto.getId());
+                Item item = itemService.findById(dto.getId());
                 int size;
                 if(findRoom == null) size = 0;
                 else size = findRoom.getRoomMemberList().size();
