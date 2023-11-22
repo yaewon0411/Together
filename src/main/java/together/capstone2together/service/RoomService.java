@@ -61,6 +61,8 @@ public class RoomService {
             object.put("creator",room.getMember().getName());
             object.put("joinedNumber",roomMemberRepository.roomMemberCount(room));
             object.put("itemId",room.getItem().getId());
+            object.put("capacity",room.getCapacity());
+            object.put("city",room.getCity());
             array.add(object);
         }
         return array;

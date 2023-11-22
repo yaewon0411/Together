@@ -20,6 +20,8 @@ public class Member implements Serializable {
     private String kakaotalkId;
     private int point;
 
+
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberTag> tagList = new ArrayList<>();
 

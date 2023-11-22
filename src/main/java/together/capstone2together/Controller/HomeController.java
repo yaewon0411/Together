@@ -43,7 +43,7 @@ public class HomeController {
 
         result.put("실시간 인기 활동", itemService.getTop20Views());
         result.put("마감 직전 활동", itemService.getImminentDeadline());
-        result.put("내가 관심있는 활동", itemTagService.findItemByInterestedTag(findOne.getTagList()));
+        result.put("내가 관심있는 활동", itemTagService.findItemByInterestedTag(tagList));
         result.put("최근 추가된 활동", itemService.getRecentlyAddedItem());
 
         return result;

@@ -28,6 +28,10 @@ public class AuthController {
     @PostMapping("/join") //회원가입
     public ResponseEntity<String> join(@RequestBody JoinDto dto) {
         Member member = new Member(dto.getId(), dto.getPassword(), dto.getName(), dto.getKakaotalkId());
+
+        boolean status = memberService.findByKakaotalkId(dto.getKakaotalkId());
+        if(status == false) throw new IllegalArgumentException("이미 존재하는 카카오톡 아이디");
+
         memberService.join(member);
 
         List<String> tagList = dto.getTagList();

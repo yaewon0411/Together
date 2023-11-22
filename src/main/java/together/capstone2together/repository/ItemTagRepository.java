@@ -61,22 +61,6 @@ public class ItemTagRepository {
                     .getResultList();
             result.addAll(addList);
             return result;
-
-//            Tag[] tag = Tag2.values();
-//
-//            int random = (int)(Math.random() *16) + 1;
-//            Tag2 addtag = tag2s[random];
-//            List<ItemTag> addList = em.createQuery("" +
-//                            "select it from ItemTag it " +
-//                            "left join fetch it.item i where it.tag = :tag and i.available = :Y", ItemTag.class)
-//                    .setParameter("tag", addtag)
-//                    .setParameter("Y","Y")
-//                    .setFirstResult(offset)
-//                    .setMaxResults(limit - offset) //테스트하면서 조절
-//                    .getResultList();
-//
-//            result.addAll(addList);
-//            return result;
         }
         return result;
     }

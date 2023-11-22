@@ -30,14 +30,18 @@ public class ItemTagService {
     }
     public JSONArray findItemByInterestedTag(List<MemberTag> memberTagList){
 
+        System.out.println("내가 관심있는 활동 메소드 실행");
         for (MemberTag memberTag : memberTagList) {
             System.out.println("memberTag.getTag().getName() = " + memberTag.getTag().getName());
         }
-        
         //멤버-태그에서 태그 번호 추출
         List<Tag> taglist = new ArrayList<>();
         for (MemberTag memberTag : memberTagList) {
             taglist.add(memberTag.getTag());
+        }
+        System.out.println("멤버-태그 리스트에서 태그 리스트 추출");
+        for (Tag tag : taglist) {
+            System.out.println("tag.getName() = " + tag.getName());
         }
         List<ItemTag> findList = itemTagRepository.findByTagList(taglist);
         JSONArray array = new JSONArray();

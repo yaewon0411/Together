@@ -88,4 +88,10 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
         }
         member.setKakaotalkId(kakaotalkId);
     }
+
+    public boolean findByKakaotalkId(String kakaotalkId) {
+        Member member = memberRepository.findByKakaotalkId(kakaotalkId);
+        if(member != null) return false;
+        else return true;
+    }
 }
