@@ -85,7 +85,6 @@ public class MyController {
     public ResponseEntity<JSONArray> getPickItems(HttpServletRequest request){
         String memberId = request.getHeader("memberId");
         Member findOne = memberService.findById(memberId);
-
         //sub서비스 makeobject쓰려면 item이랑 jsonobject 빈 객체 같이 넘겨야 함
         return ResponseEntity.ok(pickService.findByMember(findOne));
     }
