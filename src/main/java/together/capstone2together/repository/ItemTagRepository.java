@@ -3,6 +3,7 @@ package together.capstone2together.repository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import together.capstone2together.domain.Item;
 import together.capstone2together.domain.ItemTag;
 import together.capstone2together.domain.Tag;
 import java.util.ArrayList;
@@ -75,6 +76,11 @@ public class ItemTagRepository {
     public List<ItemTag> findBySingleTag(Tag tag){
         return em.createQuery("select it from ItemTag it where it.tag = :tag", ItemTag.class)
                 .setParameter("tag",tag)
+                .getResultList();
+    }
+    public List<Item> findItemByItemTag(ItemTag itemTag){
+        return em.createQuery("select i from ItemTag it left join fetch it.item i where i = :item",Item.class)
+                .setParameter("item",itemTag.getItem())
                 .getResultList();
     }
 

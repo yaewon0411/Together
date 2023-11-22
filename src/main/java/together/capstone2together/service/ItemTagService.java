@@ -6,10 +6,7 @@ import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.Item;
-import together.capstone2together.domain.ItemTag;
-import together.capstone2together.domain.MemberTag;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.*;
 import together.capstone2together.dto.SearchDto;
 import together.capstone2together.repository.ItemTagRepository;
 
@@ -24,30 +21,32 @@ public class ItemTagService {
     private final ItemTagRepository itemTagRepository;
     private final SubService subService;
 
+    private final RoomService roomService;
     @Transactional
     public void save(List<ItemTag> itemTagList){
         itemTagRepository.save(itemTagList);
     }
     public JSONArray findItemByInterestedTag(List<MemberTag> memberTagList){
 
-        System.out.println("내가 관심있는 활동 메소드 실행");
-        for (MemberTag memberTag : memberTagList) {
-            System.out.println("memberTag.getTag().getName() = " + memberTag.getTag().getName());
-        }
         //멤버-태그에서 태그 번호 추출
         List<Tag> taglist = new ArrayList<>();
         for (MemberTag memberTag : memberTagList) {
             taglist.add(memberTag.getTag());
         }
-        System.out.println("멤버-태그 리스트에서 태그 리스트 추출");
-        for (Tag tag : taglist) {
-            System.out.println("tag.getName() = " + tag.getName());
-        }
+        //멤버-태그 기반으로 아이템-태그 리스트 추출
         List<ItemTag> findList = itemTagRepository.findByTagList(taglist);
         JSONArray array = new JSONArray();
         for (ItemTag itemTag : findList) {
-            JSONObject object = new JSONObject();
-            array.add(makeObject(itemTag, object));
+            List<Item> findItem = itemTagRepository.findItemByItemTag(itemTag);
+            for (Item item : findItem) {
+                Room findRoom = roomService.findById(item.getId());
+                int size;
+                if(findRoom == null) size = 0;
+                else size = findRoom.getRoomMemberList().size();
+                JSONObject object = new JSONObject();
+                array.add(makeObject(itemTag, object));
+                array.add(subService.makeObject(item, object,size));
+            }
         }
         return array;
     }
@@ -60,6 +59,7 @@ public class ItemTagService {
         object.put("views",findOne.getViews());
         object.put("img",findOne.getImg());
         object.put("Dday",subService.makeDday(findOne.getDeadline()));
+
         return object;
     }
     public List<ItemTag> findByTagList(List<Tag>tagList){
