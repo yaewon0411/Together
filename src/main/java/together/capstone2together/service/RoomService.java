@@ -48,8 +48,6 @@ public class RoomService {
         if(findList.size()!=0) throw new IllegalStateException("중복 생성");
     }
 
-
-
     //아이템에 생성된 방 리스트 보기
     public JSONArray findByItem(Item item){
         List<Room> findList = roomRepository.findByItem(item);

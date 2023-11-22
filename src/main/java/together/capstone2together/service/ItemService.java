@@ -9,6 +9,7 @@ import together.capstone2together.domain.Item;
 import together.capstone2together.domain.MemberTag;
 import together.capstone2together.dto.SearchDto;
 import together.capstone2together.repository.ItemRepository;
+import together.capstone2together.repository.RoomRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,10 +24,10 @@ public class ItemService {
     private final SubService subService;
 
 
-
     //실시간 인기 활동
     public JSONArray getTop20Views(){
         List<Item> findList = itemRepository.findTop20ByViews(getCurrentTime());
+
         JSONArray array = new JSONArray();
         for (Item item : findList) {
             JSONObject object = new JSONObject();

@@ -1,6 +1,7 @@
 package together.capstone2together.service;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import together.capstone2together.domain.Item;
 
@@ -12,7 +13,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 @Service
+@RequiredArgsConstructor
 public class SubService {
+
+    private final RoomService roomService;
 
     public Object makeObject(Item item, JSONObject object) {
         object.put("title", item.getTitle());
@@ -21,6 +25,7 @@ public class SubService {
         object.put("views",item.getViews());
         object.put("img",item.getImg());
         object.put("Dday",makeDday(item.getDeadline()));
+        object.put("JoinedNumber",roomService.findByItem(item).size()+1);
         return object;
     }
     public JSONObject makeItemJson(Item item){

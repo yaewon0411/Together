@@ -24,5 +24,4 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query("select r from Room r where r.item = :item and r.member = :member")
     List<Room> findByMemberAndItem(@Param("item")Item item, @Param("member")Member member);
 
-
 }
