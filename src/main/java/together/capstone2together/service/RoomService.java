@@ -119,6 +119,7 @@ public class RoomService {
         return room;
     }
     //컨트롤러 짜면서 추가
+    @Transactional
     public void deleteRoom(Room room){
         roomRepository.delete(room);
     }

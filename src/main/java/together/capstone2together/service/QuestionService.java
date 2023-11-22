@@ -49,7 +49,7 @@ public class QuestionService {
         }
         return object;
     }
-
+    @Transactional
     public void deleteQuestion(Question question) {
         questionRepository.delete(question);
     }
