@@ -63,6 +63,7 @@ public class RoomService {
             object.put("itemId",room.getItem().getId());
             object.put("capacity",room.getCapacity());
             object.put("city",room.getCity());
+            object.put("roomId",room.getId());
             array.add(object);
         }
         return array;

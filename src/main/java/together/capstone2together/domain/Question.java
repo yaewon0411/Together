@@ -15,6 +15,7 @@ public class Question {
     @Id @GeneratedValue
     @Column(name="question_id")
     private Long id;
+    @Column(columnDefinition = "LONGTEXT")
     private List<String> questionList = new ArrayList<>();
 
     public Question(List<String> questionList) {
