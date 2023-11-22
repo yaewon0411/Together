@@ -61,7 +61,7 @@ public class ItemTagRepository {
             List<ItemTag> addList = em.createQuery("SELECT it FROM ItemTag it WHERE it NOT IN :subList ORDER BY FUNCTION('RAND') LIMIT :count", ItemTag.class)
                     .setParameter("count", offset)
                     .setParameter("subList",subList)
-                    .setFirstResult(0)
+                    .setFirstResult(offset)
                     .setMaxResults(limit - offset)
                     .getResultList();
             result.addAll(addList);
