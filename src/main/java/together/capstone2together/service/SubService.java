@@ -13,19 +13,17 @@ import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 @Service
-@RequiredArgsConstructor
 public class SubService {
 
-    private final RoomService roomService;
 
-    public Object makeObject(Item item, JSONObject object) {
+    public Object makeObject(Item item, JSONObject object, int joinedNumber) {
         object.put("title", item.getTitle());
         object.put("itemId",item.getId());
         object.put("sponsor",item.getSponsor());
         object.put("views",item.getViews());
         object.put("img",item.getImg());
         object.put("Dday",makeDday(item.getDeadline()));
-        object.put("JoinedNumber",roomService.findByItem(item).size()+1);
+        object.put("JoinedNumber",joinedNumber+1);
         return object;
     }
     public JSONObject makeItemJson(Item item){

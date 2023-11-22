@@ -34,6 +34,7 @@ public class ItemTag implements Serializable {
             itemTag.setTag(tag);
             itemTag.setItem(item);
             item.getTagList().add(itemTag);
+            itemTagList.add(itemTag);
         }
         return itemTagList;
     }

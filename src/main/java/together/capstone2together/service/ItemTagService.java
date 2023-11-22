@@ -24,6 +24,7 @@ public class ItemTagService {
     private final ItemTagRepository itemTagRepository;
     private final SubService subService;
 
+    @Transactional
     public void save(List<ItemTag> itemTagList){
         itemTagRepository.save(itemTagList);
     }

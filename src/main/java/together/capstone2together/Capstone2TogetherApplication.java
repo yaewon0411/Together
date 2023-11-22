@@ -4,6 +4,8 @@ package together.capstone2together;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.nio.charset.Charset;
+
 
 @SpringBootApplication
 public class Capstone2TogetherApplication {

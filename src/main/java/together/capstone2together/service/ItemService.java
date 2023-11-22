@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.Item;
 import together.capstone2together.domain.MemberTag;
+import together.capstone2together.domain.Room;
 import together.capstone2together.dto.SearchDto;
 import together.capstone2together.repository.ItemRepository;
 import together.capstone2together.repository.RoomRepository;
@@ -22,7 +23,11 @@ import java.util.List;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final SubService subService;
+    private final RoomService roomService;
 
+    public Item save(Item item){
+        return itemRepository.save(item);
+    }
 
     //실시간 인기 활동
     public JSONArray getTop20Views(){
@@ -30,8 +35,12 @@ public class ItemService {
 
         JSONArray array = new JSONArray();
         for (Item item : findList) {
+            Room findRoom = roomService.findById(item.getId());
+            int size;
+            if(findRoom == null) size = 0;
+            else size = findRoom.getRoomMemberList().size();
             JSONObject object = new JSONObject();
-            array.add(subService.makeObject(item, object));
+            array.add(subService.makeObject(item, object, size));
         }
         return array;
     }
@@ -49,8 +58,12 @@ public class ItemService {
         List<Item> findList = itemRepository.findTop20ByDeadlineAfterOrderByDeadlineAsc(getCurrentTime());
         JSONArray array = new JSONArray();
         for (Item item : findList) {
+            Room findRoom = roomService.findById(item.getId());
+            int size;
+            if(findRoom == null) size = 0;
+            else size = findRoom.getRoomMemberList().size();
             JSONObject object = new JSONObject();
-            array.add(subService.makeObject(item, object));
+            array.add(subService.makeObject(item, object, size));
         }
         return array;
     }
@@ -59,8 +72,12 @@ public class ItemService {
         List<Item> findList = itemRepository.findTop20ByOrderByIdDesc(getCurrentTime());
         JSONArray array = new JSONArray();
         for (Item item : findList) {
+            Room findRoom = roomService.findById(item.getId());
+            int size;
+            if(findRoom == null) size = 0;
+            else size = findRoom.getRoomMemberList().size();
             JSONObject object = new JSONObject();
-            array.add(subService.makeObject(item, object));
+            array.add(subService.makeObject(item, object, size));
         }
         return array;
     }

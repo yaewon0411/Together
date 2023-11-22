@@ -92,7 +92,9 @@ public class RoomService {
         else return false;
     }
     public Room findById(Long id){
-        return roomRepository.findById(id).get();
+        Optional<Room> byId = roomRepository.findById(id);
+        if(byId.isEmpty()) return null;
+        else return byId.get();
     }
 
 

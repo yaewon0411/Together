@@ -33,7 +33,7 @@ public class Room {
     private String city; //활동 지역
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Survey survey;
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
     public static Room create (Item item, Member member, String title, String content, int capacity, String city, Survey survey) {

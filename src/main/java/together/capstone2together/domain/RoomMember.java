@@ -23,6 +23,7 @@ public class RoomMember { //여기는 설문 답변 status = pass 인 회원만 
         roomMember.setRoom(room);
         roomMember.setMember(member);
         roomMember.getMember().getJoinedRooms().add(roomMember);
+        roomMember.getRoom().getRoomMemberList().add(roomMember);
         return roomMember;
     }
 }
