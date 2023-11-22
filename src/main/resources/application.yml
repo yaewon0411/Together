@@ -54,8 +54,8 @@ cloud:
     s3:
       bucket: yw-capstone2-bucket
     credentials:
-      access-key: {ACCESS_KEY}
-      secret-key: {SECRET_KEY}
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
     region:
       static: ap-northeast-2
       auto: false
