@@ -1,5 +1,7 @@
 package together.capstone2together.service;
 
+import com.nimbusds.jose.shaded.json.JSONArray;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PickService {
     private final PickRepository pickRepository;
+    private final SubService subService;
 
     @Transactional
     //찜 저장
@@ -29,6 +32,15 @@ public class PickService {
             System.out.println("pick = " + pick1.getItem().getId() + pick1.getMember().getName());
         }
         if(findList.size()>0) throw new IllegalStateException("이미 찜한 대외활동 입니다.");
+    }
+    public JSONArray findByMember(Member member){
+        JSONObject object = new JSONObject();
+        JSONArray array = new JSONArray();
+        List<Item> findList = pickRepository.findByMember(member);
+        for (Item item : findList) {
+            array.add(subService.makeObject(item, object));
+        }
+        return array;
     }
 
 }

@@ -2,6 +2,7 @@ package together.capstone2together.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,12 +33,17 @@ public class AuthController {
         List<String> tagList = dto.getTagList();
         for (String name : tagList) {
             Tag findTag = tagService.findOneByName(name);
+            if(findTag == null){
+                Tag tag = Tag.create(name);
+                tagService.save(tag);
+                findTag = tagService.findOneByName(tag.getName());
+            }
             MemberTag memberTag = MemberTag.create(member,findTag);
             memberTagService.save(memberTag);
         }
         return ResponseEntity.ok("join success");
     }
-    @PostMapping("/login") //로그인
+    @GetMapping("/login") //로그인
     public ResponseEntity<String> login(@RequestBody LoginDto dto){
         memberService.login(dto.getId(), dto.getPassword());
         return ResponseEntity.ok("login success");

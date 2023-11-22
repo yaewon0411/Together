@@ -80,4 +80,12 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
         if(findOne.isEmpty()) throw new NoResultException("해당 회원은 존재하지 않습니다.");
         return findOne.get();
     }
+
+    @Transactional
+    public void changeKakaotalkId(Member member, String kakaotalkId) {
+        if(member == null || kakaotalkId == null ){
+            throw new IllegalArgumentException("인자가 올바르지 않습니다.");
+        }
+        member.setKakaotalkId(kakaotalkId);
+    }
 }

@@ -18,4 +18,5 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
 
     @Query("select p from Pick p where p.member = :member and p.item = :item")
     List<Pick> findByMemberAndItem(@Param("member")Member member, @Param("item")Item item);
+
 }

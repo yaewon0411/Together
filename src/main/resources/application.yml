@@ -3,11 +3,6 @@
 #    ansi:
 #      enabled: always
 #
-#  datasource:
-#    url: jdbc:oracle:thin:@capstone2_high?TNS_ADMIN=/Users/admin/Desktop/capstone2/Wallet_Capstone2
-#    username: admin
-#    password: Odunkshot0606*
-#    driver-class-name: oracle.jdbc.OracleDriver
 #
 #  jpa:
 #    hibernate:
@@ -45,7 +40,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create   #create
+      ddl-auto: update   #create
     properties:
       hibernate:
         # show_sql: true
@@ -59,8 +54,8 @@ cloud:
     s3:
       bucket: yw-capstone2-bucket
     credentials:
-      access-key: ${ACCESS_KEY}
-      secret-key: ${SECRET_KEY}
+      access-key: {ACCESS_KEY}
+      secret-key: {SECRET_KEY}
     region:
       static: ap-northeast-2
       auto: false

@@ -7,16 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import together.capstone2together.domain.Member;
-import together.capstone2together.domain.MemberTag;
-import together.capstone2together.domain.SurveyAnswer;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.*;
+import together.capstone2together.dto.ChangeKakaotalkIdDto;
 import together.capstone2together.dto.ChangePwDto;
 import together.capstone2together.dto.TagListDto;
-import together.capstone2together.service.MemberService;
-import together.capstone2together.service.MemberTagService;
-import together.capstone2together.service.SurveyAnswerService;
-import together.capstone2together.service.TagService;
+import together.capstone2together.service.*;
 
 import java.util.List;
 
@@ -28,12 +23,13 @@ public class MyController {
     private final MemberService memberService;
     private final SurveyAnswerService surveyAnswerService;
     private final MemberTagService memberTagService;
-
     private final TagService tagService;
+    private final PickService pickService;
+
 
     //포인트 조회, 개설한 방 수, 지원한 방 수(waiting, pass), 닉네임(name), 아이디 내보내기
     @GetMapping
-    public JSONObject myInfo(HttpServletRequest request){
+    public ResponseEntity<JSONObject> myInfo(HttpServletRequest request){
         String memberId = request.getHeader("memberId");
         Member findMember = memberService.findById(memberId);
         List<SurveyAnswer> findAnswerList = surveyAnswerService.findByMemberExcludeFailSurvey(findMember);
@@ -49,7 +45,7 @@ public class MyController {
         object.put("createdRoomCnt", createdRoomCnt);
         object.put("applyRoomCnt", applyRoomCnt);
 
-        return object;
+        return ResponseEntity.ok(object);
     }
     /*
     태그 리스트 재설정
@@ -70,12 +66,28 @@ public class MyController {
     }
     //비밀번호 재설정
     @PostMapping("/pw")
-    public String changePw(HttpServletRequest request, @RequestBody ChangePwDto dto){
+    public ResponseEntity<String> changePw(HttpServletRequest request, @RequestBody ChangePwDto dto){
 
         String memberId = request.getHeader("memberId");
         Member findOne = memberService.findById(memberId);
         memberService.changePw(findOne, dto.getChangePw());
-        return "비밀번호 재설정 완료";
+        return ResponseEntity.ok("비밀번호 재설정 완료");
+    }
+    @PostMapping("/kakaotalkId")
+    public ResponseEntity<String> changeKakaotalkId(HttpServletRequest request, @RequestBody ChangeKakaotalkIdDto dto){
+        String memberId = request.getHeader("memberId");
+        Member findOne = memberService.findById(memberId);
+        memberService.changeKakaotalkId(findOne, dto.getKakaotalkId());
+        return ResponseEntity.ok("카카오톡 아이디 변경 완료");
+    }
+    //관심있는 활동 -> pick 한 아이템들 리스트로 내보내기
+    @GetMapping("/pick")
+    public ResponseEntity<JSONArray> getPickItems(HttpServletRequest request){
+        String memberId = request.getHeader("memberId");
+        Member findOne = memberService.findById(memberId);
+
+        //sub서비스 makeobject쓰려면 item이랑 jsonobject 빈 객체 같이 넘겨야 함
+        return ResponseEntity.ok(pickService.findByMember(findOne));
     }
 
 }

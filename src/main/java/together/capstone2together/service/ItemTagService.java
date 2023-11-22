@@ -28,6 +28,11 @@ public class ItemTagService {
         itemTagRepository.save(itemTagList);
     }
     public JSONArray findItemByInterestedTag(List<MemberTag> memberTagList){
+
+        for (MemberTag memberTag : memberTagList) {
+            System.out.println("memberTag.getTag().getName() = " + memberTag.getTag().getName());
+        }
+        
         //멤버-태그에서 태그 번호 추출
         List<Tag> taglist = new ArrayList<>();
         for (MemberTag memberTag : memberTagList) {

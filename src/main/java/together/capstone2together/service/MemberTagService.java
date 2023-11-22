@@ -30,8 +30,5 @@ public class MemberTagService {
         MemberTag memberTag = MemberTag.create(member,tag);
         memberTagRepository.save(memberTag);
     }
-//    public List<Tag> findItemByInterestedTag(Member member){
-//        return memberTagRepository.findItemByInterestedTag(member);
-//    }
 }
 
