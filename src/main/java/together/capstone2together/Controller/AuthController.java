@@ -43,7 +43,7 @@ public class AuthController {
         }
         return ResponseEntity.ok("join success");
     }
-    @GetMapping("/login") //로그인
+    @PostMapping("/login") //로그인
     public ResponseEntity<String> login(@RequestBody LoginDto dto){
         memberService.login(dto.getId(), dto.getPassword());
         return ResponseEntity.ok("login success");
