@@ -37,9 +37,10 @@ public class ItemTagRepository {
         int limit = 20;
         int size = tagList.size();
         int perSize = limit/size;
+        List<ItemTag> subList = new ArrayList<>();
 
         for (Tag tag : tagList) {
-            List<ItemTag> subList = em.createQuery("" +
+            subList = em.createQuery("" +
                             "select it from ItemTag it " +
                             "left join fetch it.item i where it.tag = :tag and i.available = :Y", ItemTag.class)
                     .setParameter("tag", tag)
@@ -54,8 +55,9 @@ public class ItemTagRepository {
         if(result.size()<limit){
             int offset = limit - result.size();
 
-            List<ItemTag> addList = em.createQuery("select it from ItemTag it order by rand() limit :count", ItemTag.class)
+            List<ItemTag> addList = em.createQuery("SELECT it FROM ItemTag it WHERE it NOT IN :subList ORDER BY FUNCTION('RAND') LIMIT :count", ItemTag.class)
                     .setParameter("count", offset)
+                    .setParameter("subList",subList)
                     .setFirstResult(0)
                     .setMaxResults(limit - offset)
                     .getResultList();
