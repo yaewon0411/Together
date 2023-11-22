@@ -50,4 +50,7 @@ public class QuestionService {
         return object;
     }
 
+    public void deleteQuestion(Question question) {
+        questionRepository.delete(question);
+    }
 }

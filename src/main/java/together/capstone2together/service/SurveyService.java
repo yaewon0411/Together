@@ -10,13 +10,18 @@ import together.capstone2together.repository.SurveyRepository;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
 
+
     public Survey  save(Survey survey){
         return surveyRepository.save(survey);
+    }
+
+    public void deleteSurvey(Survey survey){
+        surveyRepository.delete(survey);
     }
 
 

@@ -5,6 +5,7 @@ import com.nimbusds.jose.shaded.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
@@ -25,6 +26,9 @@ public class TeamMemberController {
     private final MemberService memberService;
     private final RoomService roomService;
     private final SurveyAnswerService surveyAnswerService;
+
+    private final SurveyService surveyService;
+    private final QuestionService questionService;
 
     //==========================팀장탭=====================================
 
@@ -48,6 +52,22 @@ public class TeamMemberController {
         object.put("img",findOne.getItem().getImg());
 
         return getObjectsByRoomCapacity(roomId, object);
+    }
+    @PostMapping("/creator/delete") //지원자가 0명인 경우 방 삭제 가능
+    public ResponseEntity<String> deleteRoom(HttpServletRequest request){
+        Long roomId = Long.valueOf(request.getHeader("roomId"));
+        Room findRoom = roomService.findById(roomId);
+        if(findRoom.getRoomMemberList().size()>0) return ResponseEntity.badRequest().body("지원자가 있는 방은 제거할 수 없습니다.");
+        Survey findSurvey = findRoom.getSurvey();
+        Question findQuestion = findSurvey.getQuestion();
+        //방 삭제
+        roomService.deleteRoom(findRoom);
+        //설문 삭제
+        surveyService.deleteSurvey(findSurvey);
+        //질문 삭제
+        questionService.deleteQuestion(findQuestion);
+
+        return ResponseEntity.ok("방 삭제 완료");
     }
 
     private JSONArray getObjectsByRoomCapacity(Long roomId, JSONObject object) {
@@ -113,6 +133,5 @@ public class TeamMemberController {
         
         return getObjectsByRoomCapacity(roomId, object);
     }
-
 
 }

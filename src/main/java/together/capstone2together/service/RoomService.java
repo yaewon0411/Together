@@ -119,4 +119,7 @@ public class RoomService {
         return room;
     }
     //컨트롤러 짜면서 추가
+    public void deleteRoom(Room room){
+        roomRepository.delete(room);
+    }
 }
