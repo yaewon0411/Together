@@ -57,6 +57,7 @@ public class ItemTagRepository {
         }
         if(result.size()<limit){
             int offset = limit - result.size();
+            System.out.println("offset = " + offset);
 
             List<ItemTag> addList = em.createQuery("SELECT it FROM ItemTag it WHERE it NOT IN :subList ORDER BY FUNCTION('RAND') LIMIT :count", ItemTag.class)
                     .setParameter("count", offset)
@@ -64,6 +65,13 @@ public class ItemTagRepository {
                     .setFirstResult(offset)
                     .setMaxResults(limit - offset)
                     .getResultList();
+
+            for (ItemTag itemTag : addList) {
+                System.out.println("itemTag.getTag().getName() = " + itemTag.getTag().getName());
+            }
+            for (ItemTag itemTag : result) {
+                System.out.println("itemTag.getTag().getName() = " + itemTag.getTag().getName());                
+            }
             result.addAll(addList);
             return result;
         }

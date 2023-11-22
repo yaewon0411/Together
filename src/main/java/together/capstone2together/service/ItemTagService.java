@@ -47,7 +47,6 @@ public class ItemTagService {
                 if(findRoom == null) size = 0;
                 else size = findRoom.getRoomMemberList().size();
                 JSONObject object = new JSONObject();
-                array.add(makeObject(itemTag, object));
                 array.add(subService.makeObject(item, object,size));
             }
         }
