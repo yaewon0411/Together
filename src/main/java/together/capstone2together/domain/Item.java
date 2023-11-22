@@ -18,7 +18,7 @@ public class Item implements Serializable { //크롤링 결과 저장
     @Column(name="item_id")
     private Long id;
     private String title;//제목
-    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String content;//내용
     private String sponsor;//주최기관
     private String img;//이미지

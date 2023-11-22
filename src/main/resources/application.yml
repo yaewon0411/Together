@@ -19,28 +19,28 @@
 #  port: 9090
 
 ###=========
-spring:
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/capstone2
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+#spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/capstone2
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
 ###==========
 
 #server:
 #  port: 9090
-#spring:
-#  datasource:
-#    url: jdbc:mariadb://${TODO_MYSQL_HOST}:${TODO_MYSQL_PORT}/${TODO_DATA_BASE_NAME}?useSSL=false
-#    username: ${TODO_MYSQL_USER_NAME}
-#    password: ${TODO_MYSQL_PASSWORD}
-#    #url: jdbc:mariadb://localhost:3306/capstone2
-#    driver-class-name: org.mariadb.jdbc.Driver
+spring:
+  datasource:
+    url: jdbc:mariadb://${TODO_MYSQL_HOST}:${TODO_MYSQL_PORT}/${TODO_DATA_BASE_NAME}?useSSL=false
+    username: ${TODO_MYSQL_USER_NAME}
+    password: ${TODO_MYSQL_PASSWORD}
+    #url: jdbc:mariadb://localhost:3306/capstone2
+    driver-class-name: org.mariadb.jdbc.Driver
 
 
   jpa:
     hibernate:
-      ddl-auto: update   #create
+      ddl-auto: create-drop   #create
     properties:
       hibernate:
         # show_sql: true
@@ -54,10 +54,8 @@ cloud:
     s3:
       bucket: yw-capstone2-bucket
     credentials:
-      access-key: AKIAVRYLLLXH4G56KVWD
-      secret-key: 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
-      #access-key: ${ACCESS_KEY}
-      #secret-key: ${SECRET_KEY}
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
 
     region:
       static: ap-northeast-2
