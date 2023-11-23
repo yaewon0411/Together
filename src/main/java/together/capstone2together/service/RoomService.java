@@ -59,7 +59,7 @@ public class RoomService {
             object.put("content",room.getContent());
             object.put("createdDay",subService.makeCreatedDay(room.getSurvey().getLocalDateTime()));
             object.put("creator",room.getMember().getName());
-            object.put("joinedNumber",roomMemberRepository.roomMemberCount(room));
+            object.put("joinedNumber",roomMemberRepository.roomMemberCount(room)+1); //팀장이 이미 들어온 경우니까 joined 1추가해서 보냄
             object.put("itemId",room.getItem().getId());
             object.put("capacity",room.getCapacity());
             object.put("city",room.getCity());

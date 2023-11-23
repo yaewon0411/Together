@@ -22,6 +22,7 @@ import java.util.Optional;
 public class RoomMemberService {
     private final RoomMemberRepository roomMemberRepository;
     private final RoomRepository roomRepository;
+    private final SubService subService;
 
     //설문 답변 pass한 회원 방에 조인시키기
     @Transactional
@@ -46,6 +47,11 @@ public class RoomMemberService {
         object.put("name",room.getMember().getName());
         object.put("kakaotalkId",room.getMember().getKakaotalkId());
         array.add(object);
+
+        JSONObject addObject = new JSONObject();
+        addObject.put("Dday",subService.makeDday(room.getItem().getDeadline()));
+        addObject.put("title",room.getItem().getTitle());
+        array.add(addObject);
 
         //팀원 반복문 돌려서 넣기
         for (ShowAllDto show : findList) {

@@ -94,9 +94,11 @@ public class TeamMemberController {
         return surveyAnswerService.findByMemberId(appliedMemberId,roomId);
     }
     @PostMapping("/creator/showJoined/surveyAnswer/pass")
-    public void surveyPass(HttpServletRequest request){ //팀장 탭 - 설문 답변 pass 판정 시키기
+    public ResponseEntity<String> surveyPass(HttpServletRequest request){ //팀장 탭 - 설문 답변 pass 판정 시키기
         Long surveyAnswerId = Long.valueOf(request.getHeader("surveyAnswerId"));
-        surveyAnswerService.setStatusToPass(surveyAnswerId);
+        SurveyAnswer findAnswer = surveyAnswerService.findById(surveyAnswerId);
+        if(findAnswer.getStatus() == Status.WAITING)
+            surveyAnswerService.setStatusToPass(surveyAnswerId);
         //지원자를 RoomMember로 등록
         SurveyAnswer findOne = surveyAnswerService.findById(surveyAnswerId);
         if(findOne.getStatus()== Status.PASS) {
@@ -105,11 +107,15 @@ public class TeamMemberController {
             RoomMember roomMember = RoomMember.create(findRoom, findMember);
             roomMemberService.save(roomMember);
         }
+        return ResponseEntity.ok("success");
     }
     @PostMapping("/creator/showJoined/surveyAnswer/fail")
-    public void surveyFail(HttpServletRequest request){ //팀장 탭 - 설문 답변 fail 판정시키기
+    public ResponseEntity<String> surveyFail(HttpServletRequest request){ //팀장 탭 - 설문 답변 fail 판정시키기
         Long surveyAnswerId = Long.valueOf(request.getHeader("surveyAnswerId"));
+        SurveyAnswer findOne = surveyAnswerService.findById(surveyAnswerId);
+        if(findOne.getStatus() == Status.PASS) throw new IllegalStateException("이미 PASS한 답변입니다.");
         surveyAnswerService.setStatusToFail(surveyAnswerId);
+        return ResponseEntity.ok("success");
     }
 
     //=====================================팀원 탭===================================================

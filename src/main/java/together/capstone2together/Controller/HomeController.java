@@ -126,6 +126,7 @@ public class HomeController {
 
         Item findItem = itemService.findById(itemId);
         Member findMember = memberService.findById(memberId);
+
         Room room = roomService.makeRoom(findItem, findMember, findSurvey, roomNode);
         roomService.save(room);
         return ResponseEntity.ok("success");
@@ -149,6 +150,12 @@ public class HomeController {
         Long roomId = Long.valueOf(request.getHeader("roomId"));
         String memberId = request.getHeader("memberId");
 
+        Room findRoom = roomService.findById(roomId);
+        Member findMember = memberService.findById(memberId);
+        Question findQuestion = findRoom.getSurvey().getQuestion();
+
+        if(findRoom.getMember() == findMember) return ResponseEntity.badRequest().body("직접 생성한 방에는 지원할 수 없습니다.");
+
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(jsonString);
         List<String> answerList = new ArrayList<>();
@@ -158,9 +165,6 @@ public class HomeController {
         }
         System.out.println("answerList = " + answerList);
 
-        Room findRoom = roomService.findById(roomId);
-        Member findMember = memberService.findById(memberId);
-        Question findQuestion = findRoom.getSurvey().getQuestion();
 
         SurveyAnswer surveyAnswer = SurveyAnswer.create(findRoom, findMember, findQuestion, answerList);
         surveyAnswerService.save(surveyAnswer);

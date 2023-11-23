@@ -48,19 +48,35 @@ public class SurveyAnswerService {
 
     //팀장 탭 - 방을 눌렀을 때 지원한 회원 리스트 뽑기 (방에 지원한 시간 LocalDateTime이라서 String이랑 맵핑이 까다롭네...
     public JSONArray getAppliedMemberList(Long id){
+
+        System.out.println("load getAppliedMemberList method");
         JSONArray array = new JSONArray();
+        JSONObject addObject = new JSONObject();
+        int cnt = 0;
 
         List<SurveyAnswer> findList = surveyAnswerRepository.findJoinedMemberByRoom(id);
-        for (SurveyAnswer sa : findList) {
-            if(sa.getStatus() == Status.FAIL) continue; //이미 fail 판정 내린 건 리스트에서 제외시키기
-            JSONObject object = new JSONObject();
-            object.put("memberId",sa.getMember().getId());
-            object.put("roomId",sa.getRoom().getId());
-            object.put("name",sa.getMember().getName());
-            object.put("appliedDay" ,subService.makeAppliedDay(sa.getLocalDateTime()));
-            object.put("status",sa.getStatus());
-            array.add(object);
+        for (SurveyAnswer surveyAnswer : findList) {
+            System.out.println("surveyAnswer.getMember().getId() = " + surveyAnswer.getMember().getId());
         }
+        for (SurveyAnswer sa : findList) {
+            if(sa.getStatus() != Status.FAIL) { //이미 fail 판정 내린 건 리스트에서 제외시키기
+                JSONObject object = new JSONObject();
+                object.put("memberId", sa.getMember().getId());
+                object.put("roomId", sa.getRoom().getId());
+                object.put("name", sa.getMember().getName());
+                object.put("appliedDay", subService.makeAppliedDay(sa.getLocalDateTime()));
+                object.put("status", sa.getStatus());
+                object.put("surveyAnswerId", sa.getId());
+
+                if(cnt==0) {
+                    addObject.put("title", sa.getRoom().getItem().getTitle());
+                    addObject.put("Dday", subService.makeDday(sa.getRoom().getItem().getDeadline()));
+                    cnt++;
+                }
+                array.add(object);
+            }
+        }
+        array.add(addObject);
         return array; //일단 막아놓고 테스트
     }
 

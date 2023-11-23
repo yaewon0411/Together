@@ -167,6 +167,7 @@ public class SubService {
         if (diffHours >= 24) {
             return diffHours/24 + "일 전";
         } else {
+            if(diffHours == 0) return "방금 전";
             return diffHours+"시간 전";
         }
     }
