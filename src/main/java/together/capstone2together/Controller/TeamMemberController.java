@@ -97,6 +97,7 @@ public class TeamMemberController {
     public ResponseEntity<String> surveyPass(HttpServletRequest request){ //팀장 탭 - 설문 답변 pass 판정 시키기
         Long surveyAnswerId = Long.valueOf(request.getHeader("surveyAnswerId"));
         SurveyAnswer findAnswer = surveyAnswerService.findById(surveyAnswerId);
+
         if(findAnswer.getStatus() == Status.WAITING)
             surveyAnswerService.setStatusToPass(surveyAnswerId);
         //지원자를 RoomMember로 등록

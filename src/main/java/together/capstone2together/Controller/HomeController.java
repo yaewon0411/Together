@@ -56,10 +56,12 @@ public class HomeController {
     @PostMapping("/item/pick") //아이템 pick 하기 (클라이언트측에서 서버로 pick 여부 전달)
     public ResponseEntity<String> itemPick(HttpServletRequest request){
         String status = request.getHeader("pick"); //pick 값은 true 아니면 false (String)
-        if(request.getHeader("pick")!=null){
+        if(status.equals("true")){
             String memberId = request.getHeader("memberId");
             Long itemId = Long.valueOf(request.getHeader("itemId"));
-            Pick pick = Pick.create(memberService.findById(memberId),itemService.findById(itemId));
+            Member findMember = memberService.findById(memberId);
+            Item findRoom = itemService.findById(itemId);
+            Pick pick = Pick.create(findMember,findRoom);
             pickService.save(pick);
         }
         return ResponseEntity.ok("success");
