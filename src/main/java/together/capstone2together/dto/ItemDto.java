@@ -10,5 +10,7 @@ public class ItemDto {
     private String content;
     private String sponsor;
     private String deadline;
+    private String homepage;
+    private String img;
     private List<String> tagList;
 }

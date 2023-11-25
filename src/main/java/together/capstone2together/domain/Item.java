@@ -42,12 +42,14 @@ public class Item implements Serializable { //크롤링 결과 저장
         }
     }
 
-    public static Item create(String title, String content, String sponsor, String deadline){
+    public static Item create(String title, String content, String sponsor, String deadline, String homepage, String img){
         Item item = new Item();
         item.setTitle(title);
         item.setContent(content);
         item.setSponsor(sponsor);
         item.setDeadline(deadline);
+        item.setHomepage(homepage);
+        item.setImg(img);
         return item;
     }
 }

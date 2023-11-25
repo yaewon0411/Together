@@ -24,7 +24,7 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
     private final TagService tagService;
-    private ItemTagService itemTagService;
+    private final ItemTagService itemTagService;
 
     @PostMapping
     public ResponseEntity<String> addItem(@RequestBody ItemDto dto){
@@ -35,15 +35,17 @@ public class ItemController {
         for (String name : tagList) {
             Tag tag = Tag.create(name);
             tagService.save(tag);
-            findList.add(tagService.findOneByName(name));
+            findList.add(tagService.findOneByName(tag.getName()));
         }
         //아이템 저장
-        Item item = Item.create(dto.getTitle(), dto.getContent(), dto.getSponsor() , dto.getDeadline());
+        Item item = Item.create(dto.getTitle(), dto.getContent(), dto.getSponsor() , dto.getDeadline(), dto.getHomepage(), dto.getImg());
         Item findOne = itemService.save(item);
-
 
         //아이템-태그 저장
         List<ItemTag> itemTagList = ItemTag.create(findList, findOne);
+        for (ItemTag itemTag : itemTagList) {
+            System.out.println("itemTag.getTag().getName() = " + itemTag.getTag().getName());
+        }
         itemTagService.save(itemTagList);
 
         return ResponseEntity.ok("success");
