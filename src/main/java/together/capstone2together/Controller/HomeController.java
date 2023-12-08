@@ -33,7 +33,7 @@ public class HomeController {
     private final TagService tagService;
 
     @GetMapping
-    public JSONObject findItemByInterestedTag(HttpServletRequest request) {
+    public ResponseEntity<JSONObject> findItemByInterestedTag(HttpServletRequest request) {
         String memberId = request.getHeader("memberId");
         Member findOne = memberService.findById(memberId);
         List<MemberTag> tagList = findOne.getTagList();
@@ -45,13 +45,13 @@ public class HomeController {
         result.put("내가 관심있는 활동", itemTagService.findItemByInterestedTag(tagList));
         result.put("최근 추가된 활동", itemService.getRecentlyAddedItem());
 
-        return result;
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/item") //홈 화면에서 특정 아이템 누르면 그 아이템의 상세 정보가 나오도록
-    public JSONObject getItemInfo(HttpServletRequest request){
+    public ResponseEntity<JSONObject> getItemInfo(HttpServletRequest request){
         Long itemId = Long.valueOf(request.getHeader("itemId"));
-        return itemService.showItemInfo(itemId);
+        return ResponseEntity.ok(itemService.showItemInfo(itemId));
     }
     @PostMapping("/item/pick") //아이템 pick 하기 (클라이언트측에서 서버로 pick 여부 전달)
     public ResponseEntity<String> itemPick(HttpServletRequest request){
@@ -68,14 +68,12 @@ public class HomeController {
     }
 
     @GetMapping("/item/room") //해당 아이템에 생성된 방들 불러오기
-    public JSONArray getAllRoom(HttpServletRequest request){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
+    public ResponseEntity<JSONArray> getAllRoom(HttpServletRequest request){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
         JSONObject object = new JSONObject();
         Long itemId = Long.valueOf(request.getHeader("itemId"));
         Item findOne = itemService.findById(itemId);
-        return roomService.findByItem(findOne);
+        return ResponseEntity.ok(roomService.findByItem(findOne));
     }
-
-    //아 이거 좀 수정있음......기획이라고 검색하면 대외활동도 같이 묶여서 나옴. 해겷가ㅣ
     @GetMapping("/search")
     public ResponseEntity<List<SearchDto>> searchItems(@RequestParam String keyword) {
         List<SearchDto> firstList = itemService.searchItems(keyword);
@@ -135,10 +133,10 @@ public class HomeController {
     }
 
     @GetMapping("/item/room/apply") //해당 아이템에 지원하기 위해 설문 양식 질문 보기
-    public JSONObject applyRoom(HttpServletRequest request){
+    public ResponseEntity<JSONObject> applyRoom(HttpServletRequest request){
         Long roomId = Long.valueOf(request.getHeader("roomId"));
         Room findOne = roomService.findById(roomId);
-        return questionService.showQuestionList(findOne.getSurvey().getQuestion());
+        return ResponseEntity.ok(questionService.showQuestionList(findOne.getSurvey().getQuestion()));
     }
     /*
 {
@@ -165,9 +163,6 @@ public class HomeController {
         for (JsonNode node : jsonNode) {
             answerList.add(node.textValue());
         }
-        System.out.println("answerList = " + answerList);
-
-
         SurveyAnswer surveyAnswer = SurveyAnswer.create(findRoom, findMember, findQuestion, answerList);
         surveyAnswerService.save(surveyAnswer);
         return ResponseEntity.ok("success");

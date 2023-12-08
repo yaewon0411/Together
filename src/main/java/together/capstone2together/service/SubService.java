@@ -14,8 +14,6 @@ import java.util.Calendar;
 
 @Service
 public class SubService {
-
-
     public Object makeObject(Item item, JSONObject object, int joinedNumber) {
         object.put("title", item.getTitle());
         object.put("itemId",item.getId());

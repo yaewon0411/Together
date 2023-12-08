@@ -101,20 +101,18 @@ public class TeamMemberController {
         if(findAnswer.getStatus() == Status.WAITING)
             surveyAnswerService.setStatusToPass(surveyAnswerId);
         //지원자를 RoomMember로 등록
-        SurveyAnswer findOne = surveyAnswerService.findById(surveyAnswerId);
-        if(findOne.getStatus()== Status.PASS) {
-            Member findMember = findOne.getMember();
-            Room findRoom = findOne.getRoom();
-            RoomMember roomMember = RoomMember.create(findRoom, findMember);
+        //findAnswer = surveyAnswerService.findById(surveyAnswerId);
+        if(findAnswer.getStatus()== Status.PASS) {
+            RoomMember roomMember = RoomMember.create(findAnswer.getRoom(), findAnswer.getMember());
             roomMemberService.save(roomMember);
         }
         return ResponseEntity.ok("success");
     }
     @PostMapping("/creator/showJoined/surveyAnswer/fail")
-    public ResponseEntity<String> surveyFail(HttpServletRequest request){ //팀장 탭 - 설문 답변 fail 판정시키기
+    public ResponseEntity<String> surveyFail(HttpServletRequest request){ //팀장 탭 - 설문 답변 fail 판정 시키기
         Long surveyAnswerId = Long.valueOf(request.getHeader("surveyAnswerId"));
         SurveyAnswer findOne = surveyAnswerService.findById(surveyAnswerId);
-        if(findOne.getStatus() == Status.PASS) throw new IllegalStateException("이미 PASS한 답변입니다.");
+        if(findOne.getStatus() == Status.PASS) throw new IllegalStateException("이미 PASS한 답변 입니다.");
         surveyAnswerService.setStatusToFail(surveyAnswerId);
         return ResponseEntity.ok("success");
     }

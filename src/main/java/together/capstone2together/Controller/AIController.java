@@ -1,5 +1,6 @@
 package together.capstone2together.Controller;
 
+import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
@@ -39,11 +40,11 @@ public class AIController {
         if(score>0){
             Member findMember = memberService.findById(request.getHeader("memberId"));
             Item findItem = itemService.findById(Long.valueOf(request.getHeader("itemId")));
-            System.out.println("findMember = " + findMember.getName());
-            System.out.println("findItem.getId() = " + findItem.getId());
             if(score>3) {
-                Pick pick = Pick.create(findMember, findItem);
-                pickService.save(pick);
+                if(!pickService.findByMemberAndItem(findMember, findItem)) {
+                    Pick pick = Pick.create(findMember, findItem);
+                    pickService.save(pick);
+                }
             }
             Interest interest = Interest.create(findMember, findItem, score);
             interestService.save(interest);
@@ -51,22 +52,5 @@ public class AIController {
         }
         return ResponseEntity.ok("success-no score");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -26,7 +26,13 @@ public class ItemService {
     private final RoomService roomService;
 
     public Item save(Item item){
+        validateDuplicatedItem(item);
         return itemRepository.save(item);
+    }
+
+    private void validateDuplicatedItem(Item item) {
+        List<Item> findList = itemRepository.validateDuplicatedItem(item);
+        if(findList.size()>0) throw new IllegalStateException("중복된 아이템 입니다.");
     }
 
     //실시간 인기 활동
