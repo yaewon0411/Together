@@ -31,7 +31,7 @@ public class ItemService {
     }
 
     private void validateDuplicatedItem(Item item) {
-        List<Item> findList = itemRepository.validateDuplicatedItem(item);
+        List<Item> findList = itemRepository.findByTitleAndDeadlineAndContent(item.getTitle(), item.getDeadline(), item.getContent());
         if(findList.size()>0) throw new IllegalStateException("중복된 아이템 입니다.");
     }
 

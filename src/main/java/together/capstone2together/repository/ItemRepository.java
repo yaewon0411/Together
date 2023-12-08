@@ -33,7 +33,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "and i.img is not null and i.homepage is not null")
     List<Item> searchedItem(@Param("keyword") String keyword);
 
-    @Query("select i from item i where i.title = :item.title and i.deadline = :item.deadline and i.content = :item.content")
-    List<Item> validateDuplicatedItem(@Param("item") Item item);
+    List<Item> findByTitleAndDeadlineAndContent(String title, String deadline, String content);
 
 }
