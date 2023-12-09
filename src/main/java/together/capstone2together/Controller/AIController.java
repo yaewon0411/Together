@@ -40,6 +40,8 @@ public class AIController {
         if(score>0){
             Member findMember = memberService.findById(request.getHeader("memberId"));
             Item findItem = itemService.findById(Long.valueOf(request.getHeader("itemId")));
+            //이미 해당 아이템에 대해 표기한 관심사가 있으면 지울것
+            interestService.ifPresentPreviousRecordThenDelete(findMember, findItem);
             if(score>3) {
                 if(!pickService.findByMemberAndItem(findMember, findItem)) {
                     Pick pick = Pick.create(findMember, findItem);

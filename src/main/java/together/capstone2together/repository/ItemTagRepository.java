@@ -75,10 +75,7 @@ public class ItemTagRepository {
             List<ItemTag> addList = em.createQuery("SELECT it FROM ItemTag it WHERE it NOT IN :itemTagList ORDER BY FUNCTION('RAND') LIMIT :count", ItemTag.class)
                     .setParameter("count", offset)
                     .setParameter("itemTagList",itemTagList)
-                    //.setFirstResult(0)
-                    //.setMaxResults(offset)
                     .getResultList();
-
             for (ItemTag itemTag : addList) {
                 resultSet.add(itemTag.getItem());
             }
@@ -107,12 +104,6 @@ public class ItemTagRepository {
             findList.stream().
                     filter(itemTag -> !result.contains(itemTag))
                             .forEach(result::add);
-
-            System.out.println("findList.size() 처음 사용자 관심 태그 기반으로 찾은 리스트 개수 = " + findList.size());
-            for (ItemTag itemTag : findList) {
-                System.out.println("처음 찾은 리스트의 itemTag.getItem().getTitle() = " + itemTag.getItem().getTitle());
-            }
-
         }
         if(result.size()<limit){
             int offset = limit - result.size();
@@ -124,11 +115,8 @@ public class ItemTagRepository {
                     .getResultList();
 
             result.addAll(addList);
-
-            System.out.println("나중에 랜덤으로 추가해서 찾은 아이템 태그 개수addList.size() = " + addList.size());
             return result;
         }
-        System.out.println("result size = " + result.size());
         return result;
     }
     public List<ItemTag> findByTag(Tag tag){

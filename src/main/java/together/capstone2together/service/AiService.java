@@ -10,6 +10,7 @@ import together.capstone2together.domain.Member;
 import together.capstone2together.repository.AiRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -28,4 +29,6 @@ public class AiService {
         AI findOne = findList.get(random);
         return findOne.getItem();
     }
+
 }
+
