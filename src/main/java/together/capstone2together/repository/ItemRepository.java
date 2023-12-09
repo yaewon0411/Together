@@ -33,6 +33,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "and i.img is not null and i.homepage is not null")
     List<Item> searchedItem(@Param("keyword") String keyword);
 
-    List<Item> findByTitleAndDeadlineAndContent(String title, String deadline, String content);
+    List<Item> findByTitleAndDeadline(String title, String deadline);
+
 
 }

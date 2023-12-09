@@ -34,14 +34,17 @@ public class PickService {
         if(findList.size()>0) throw new IllegalStateException("이미 찜한 대외활동 입니다.");
     }
     public JSONArray findByMember(Member member){
-        JSONObject object = new JSONObject();
+
+
         JSONArray array = new JSONArray();
         List<Item> findList = pickRepository.findByMember(member);
         for (Item item : findList) {
+            System.out.println("item.getTitle() = " + item.getTitle());
             Room findRoom = roomService.findById(item.getId());
             int size;
             if(findRoom == null) size = 0;
             else size = findRoom.getRoomMemberList().size();
+            JSONObject object = new JSONObject();
             array.add(subService.makeObject(item, object,size));
         }
         return array;

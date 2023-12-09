@@ -13,6 +13,7 @@ import together.capstone2together.repository.ItemTagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,26 +32,37 @@ public class ItemTagService {
     public JSONArray findItemByInterestedTag(List<MemberTag> memberTagList){
 
         //멤버-태그에서 태그 번호 추출
-        List<Tag> taglist = new ArrayList<>();
+        List<Tag> tagList = new ArrayList<>();
         for (MemberTag memberTag : memberTagList) {
-            taglist.add(memberTag.getTag());
+            tagList.add(memberTag.getTag());
         }
         //멤버-태그 기반으로 아이템-태그 리스트 추출
-        List<ItemTag> findList = itemTagRepository.findByTagList(taglist);
+        //List<ItemTag> findList = itemTagRepository.findByTagList(taglist);
+        Set<Item> findSet = itemTagRepository.findItemListByTag(tagList);
+        List<Item> findList = new ArrayList<>(findSet);
         JSONArray array = new JSONArray();
-        for (ItemTag itemTag : findList) {
-            List<ItemIdDto> itemIdList = itemTagRepository.findItemByItemTag(itemTag);
-            for (ItemIdDto dto: itemIdList) {
-                Room findRoom = roomService.findById(dto.getId());
-                Item item = itemService.findById(dto.getId());
-                int size;
-                if(findRoom == null) size = 0;
-                else size = findRoom.getRoomMemberList().size();
-                JSONObject object = new JSONObject();
-                array.add(subService.makeObject(item, object,size));
-            }
+        for (Item item : findList) {
+            List<Room> roomList = roomService.getRoomListByItem(item);
+            int size = roomList.size();
+            JSONObject object = new JSONObject();
+            array.add(subService.makeObject(item, object, size));
+
         }
         return array;
+//
+//        for (ItemTag itemTag : findList) {
+//            List<ItemIdDto> itemIdList = itemTagRepository.findItemByItemTag(itemTag);
+//            for (ItemIdDto dto: itemIdList) {
+//                Room findRoom = roomService.findById(dto.getId());
+//                Item item = itemService.findById(dto.getId());
+//                int size;
+//                if(findRoom == null) size = 0;
+//                else size = findRoom.getRoomMemberList().size();
+//                JSONObject object = new JSONObject();
+//                array.add(subService.makeObject(item, object,size));
+//            }
+//        }
+//        return array;
     }
 
     private Object makeObject(ItemTag itemTag, JSONObject object) {

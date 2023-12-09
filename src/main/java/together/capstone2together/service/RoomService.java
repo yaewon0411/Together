@@ -4,23 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.Item;
 import together.capstone2together.domain.Member;
 import together.capstone2together.domain.Room;
 import together.capstone2together.domain.Survey;
-import together.capstone2together.dto.CreatorRoomDto;
-import together.capstone2together.repository.ItemRepository;
 import together.capstone2together.repository.RoomMemberRepository;
 import together.capstone2together.repository.RoomRepository;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,6 +59,9 @@ public class RoomService {
             array.add(object);
         }
         return array;
+    }
+    public List<Room> getRoomListByItem(Item item){
+        return roomRepository.findByItem(item);
     }
     //팀장 탭 방 리스트
     public JSONArray findCreatorRoomList(Member member){
