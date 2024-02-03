@@ -42,12 +42,4 @@ public class MemberTagRepository {
             em.merge(memberTag);
         }
     }
-//    public List<MemberTag> findItemByInterestedTag(Member member){
-//        List<MemberTag> findList = member.getTagList();
-//        List<Tag> tagList = new ArrayList<>(); //아이디랑 태그이름
-//        for (MemberTag memberTag : findList) {
-//
-//        }
-//        return tagList;
-//    }
 }

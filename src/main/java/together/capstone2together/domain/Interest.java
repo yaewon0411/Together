@@ -1,13 +1,11 @@
 package together.capstone2together.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Interest { //ai 추천 대외활동에 대한 관심도(1-5) 저장. score>3이면 Pick으로
     @Id@GeneratedValue
     @Column(name="interest_id")

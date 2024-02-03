@@ -1,14 +1,16 @@
 package together.capstone2together.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.cache.annotation.AbstractCachingConfiguration;
 import org.springframework.security.core.parameters.P;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pick { //유저가 찜한 대외활동
 
     @Id @GeneratedValue

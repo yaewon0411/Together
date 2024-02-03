@@ -35,14 +35,13 @@ public class TeamMemberController {
     //팀장 탭 - 팀장이 생성한 방 리스트
     @GetMapping("/creator")
     public JSONArray showCreatedRoom(HttpServletRequest request) {
-        String id = request.getHeader("memberId");
-        Member findOne = memberService.findById(id);
+        Member findOne = memberService.findById(request.getHeader("memberId"));
         return roomService.findCreatorRoomList(findOne);
     }
 
     //팀장 탭 - 팀장이 생성한 방에 모든 지원자가 들어온 경우 역할과 함께 뿌림
     @GetMapping("/creator/showJoined")
-    public Object showAll(HttpServletRequest request){ //Long은 RequestParam으로 안돼서 post로 맵핑
+    public ResponseEntity<Object> showAll(HttpServletRequest request){ //Long은 RequestParam으로 안돼서 post로 맵핑
 
         Long roomId = Long.valueOf(request.getHeader("roomId"));
         Room findOne = roomService.findById(roomId);
@@ -51,7 +50,7 @@ public class TeamMemberController {
         JSONObject object = new JSONObject();
         object.put("img",findOne.getItem().getImg());
 
-        return getObjectsByRoomCapacity(roomId, object);
+        return ResponseEntity.ok(getObjectsByRoomCapacity(roomId, object));
     }
     @PostMapping("/creator/delete") //지원자가 0명인 경우 방 삭제 가능
     public ResponseEntity<String> deleteRoom(HttpServletRequest request){

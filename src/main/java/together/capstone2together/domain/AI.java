@@ -1,13 +1,17 @@
 package together.capstone2together.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.security.ProtectionDomain;
 import java.util.List;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AI { //ai가 자정 지난 후 해당 멤버에게 추천할 아이템 번호들을 저장하는 테이블
 
     @Id @GeneratedValue

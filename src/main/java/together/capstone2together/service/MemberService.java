@@ -19,7 +19,6 @@ import java.util.Optional;
 public class MemberService { //예외 처리 서비스 클래스 만들어서 나중에 다 리팩토링
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
-    private final EntityManager em;
 
     //회원 가입
     @Transactional

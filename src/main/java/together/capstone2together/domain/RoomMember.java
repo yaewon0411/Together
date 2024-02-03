@@ -1,11 +1,14 @@
 package together.capstone2together.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomMember { //여기는 설문 답변 status = pass 인 회원만 들어옴에 유의
     @Id@GeneratedValue
     @Column(name = "roomMember_id")

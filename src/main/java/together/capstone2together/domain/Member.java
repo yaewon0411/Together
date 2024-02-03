@@ -10,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Getter@Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member implements Serializable {
     @Id @Column(name = "member_id", unique = true)
     private String id;
@@ -19,8 +20,6 @@ public class Member implements Serializable {
     @Column(name = "kakaotalk_id", unique = true)
     private String kakaotalkId;
     private int point;
-
-
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberTag> tagList = new ArrayList<>();

@@ -42,7 +42,7 @@ public class HomeController {
 
         result.put("실시간 인기 활동", itemService.getTop20Views());
         result.put("마감 직전 활동", itemService.getImminentDeadline());
-        result.put("내가 관심있는 활동", itemTagService.findItemByInterestedTag(tagList));
+        result.put("내가 관심 있는 활동", itemTagService.findItemByInterestedTag(tagList));
         result.put("최근 추가된 활동", itemService.getRecentlyAddedItem());
 
         return ResponseEntity.ok(result);
@@ -69,7 +69,6 @@ public class HomeController {
 
     @GetMapping("/item/room") //해당 아이템에 생성된 방들 불러오기
     public ResponseEntity<JSONArray> getAllRoom(HttpServletRequest request){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
-        JSONObject object = new JSONObject();
         Long itemId = Long.valueOf(request.getHeader("itemId"));
         Item findOne = itemService.findById(itemId);
         return ResponseEntity.ok(roomService.findByItem(findOne));
@@ -113,7 +112,7 @@ public class HomeController {
     public ResponseEntity<String> makeRoom(@RequestBody String jsonString, HttpServletRequest request) throws JsonProcessingException {
 
         String memberId1 = request.getHeader("memberId");
-        if(memberId1==null) throw new IllegalStateException("로그인 해주세요");
+        if(memberId1==null) throw new IllegalStateException("로그인 해주세요.");
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(jsonString);
