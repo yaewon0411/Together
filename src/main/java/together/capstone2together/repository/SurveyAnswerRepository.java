@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import together.capstone2together.domain.Member;
 import together.capstone2together.domain.Room;
+import together.capstone2together.domain.Survey;
 import together.capstone2together.domain.SurveyAnswer;
 import together.capstone2together.dto.MemberDto;
 import together.capstone2together.dto.RoomDto;
@@ -19,11 +20,8 @@ public interface SurveyAnswerRepository extends JpaRepository<SurveyAnswer,Long>
     @Query("select sa from SurveyAnswer sa join sa.member m where sa.room.id = :id")
     List<SurveyAnswer> findJoinedMemberByRoom(@Param("id") Long id);    //팀장 탭 - 방을 눌렀을 때 지원한 회원 리스트 뽑기
 
-//    @Query("select new together.capstone2together.dto.RoomDto(r.title, r.content, sa.status, r.member.name, r.survey.localDateTime, r.city) " +
-//            "from SurveyAnswer sa " +
-//            "join sa.room r " +
-//            "where sa.member = :member")
-    //@Query("select sa from SurveyAnswer sa left join sa.room r left join sa.member m where sa.member = :member")
+    List<SurveyAnswer> findBySurvey(Survey survey);
+
     @Query("select new together.capstone2together.dto.RoomDto(r.title, r.content, sa.status, r.member.name, r.survey.localDateTime, r.city, r.id) " +
             "from SurveyAnswer sa " +
             "join sa.room r " +

@@ -22,6 +22,7 @@ import java.util.Map;
 public class TeamMemberController {
 
     private final RoomMemberService roomMemberService;
+    private final AnswerService answerService;
 
     private final MemberService memberService;
     private final RoomService roomService;
@@ -52,19 +53,30 @@ public class TeamMemberController {
 
         return ResponseEntity.ok(getObjectsByRoomCapacity(roomId, object));
     }
+
+    //TODO - 이거 테스트 무조건 해야 함..
     @PostMapping("/creator/delete") //지원자가 0명인 경우 방 삭제 가능
     public ResponseEntity<String> deleteRoom(HttpServletRequest request){
         Long roomId = Long.valueOf(request.getHeader("roomId"));
         Room findRoom = roomService.findById(roomId);
         if(findRoom.getRoomMemberList().size()>0) return ResponseEntity.badRequest().body("지원자가 있는 방은 제거할 수 없습니다.");
         Survey findSurvey = findRoom.getSurvey();
-        Question findQuestion = findSurvey.getQuestion();
+        List<Question> findQuestions = findSurvey.getQuestions();
+        List<SurveyAnswer> findSurveyAnswers = surveyAnswerService.findBySurvey(findSurvey);
+
+        //개별 답변 삭제
+        for (SurveyAnswer surveyAnswer : findSurveyAnswers) {
+            answerService.delete(surveyAnswer.getAnswers());
+        }
+        //사용자 총 답변 삭제
+        surveyAnswerService.delete(findSurveyAnswers);
+
         //방 삭제
-        roomService.deleteRoom(findRoom);
+        roomService.delete(findRoom);
         //설문 삭제
-        surveyService.deleteSurvey(findSurvey);
+        surveyService.delete(findSurvey);
         //질문 삭제
-        questionService.deleteQuestion(findQuestion);
+        questionService.deleteQuestions(findQuestions);
 
         return ResponseEntity.ok("방 삭제 완료");
     }

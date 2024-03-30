@@ -14,6 +14,7 @@ import together.capstone2together.domain.Survey;
 import together.capstone2together.repository.QuestionRepository;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,28 +30,43 @@ public class QuestionService {
         if(findOne.isEmpty()) throw new NoResultException("존재하지 않는 질문");
         return findOne.get();
     }
-
-    @Transactional
-    public Question makeQuestion(JsonNode jsonNode) throws JsonProcessingException {
-        List<String> questionList = new ArrayList<>();
-        for (JsonNode node1 : jsonNode) {
-            questionList.add(node1.textValue());
-        }
-        Question question = new Question(questionList);
-        return  questionRepository.save(question);
+    /*
+      "Question" : {
+        "1" : "이름은?"
+        "2" :  "나이는?"
     }
-    public JSONObject showQuestionList(Question question){
-        List<String> questionList = question.getQuestionList();
+    */
+    @Transactional
+    public List<Question> makeQuestion(JsonNode jsonNode) throws JsonProcessingException {
+        List<Question> questionList = new LinkedList<>();
+        for (JsonNode node : jsonNode) {
+            Question question = Question.create(node.textValue());
+            questionRepository.save(question);
+            questionList.add(question);
+        }
+        return questionList;
+    }
+
+    public JSONObject findQuestions(Survey survey){
+        List<Question> questions = questionRepository.findBySurvey(survey);
         JSONObject object = new JSONObject();
         int num = 1;
-        for (String s : questionList) {
-            object.put(String.valueOf(num), s);
+        for (Question question : questions) {
+            object.put(String.valueOf(num),question);
             num++;
         }
         return object;
     }
+
     @Transactional
     public void deleteQuestion(Question question) {
         questionRepository.delete(question);
+    }
+
+    @Transactional
+    public void deleteQuestions(List<Question> questions){
+        for (Question question : questions) {
+            questionRepository.delete(question);
+        }
     }
 }

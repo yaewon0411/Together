@@ -116,7 +116,7 @@ public class RoomService {
     }
     //컨트롤러 짜면서 추가
     @Transactional
-    public void deleteRoom(Room room){
+    public void delete(Room room){
         roomRepository.delete(room);
     }
 }

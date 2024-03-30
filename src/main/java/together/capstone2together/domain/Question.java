@@ -13,13 +13,30 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="question_id")
     private Long id;
-    @Column(columnDefinition = "LONGTEXT")
-    private List<String> questionList = new ArrayList<>();
 
-    public Question(List<String> questionList) {
-        this.questionList = questionList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "survey_id")
+    private Survey survey;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String asking;
+
+    public Question(String asking){
+        this.asking = asking;
     }
+    public static Question create(String asking){
+        Question question = new Question(asking);
+        return question;
+    }
+
+
+//    @Column(columnDefinition = "LONGTEXT")
+//    private List<String> questionList = new ArrayList<>();
+
+//    public Question(List<String> questionList) {
+//        this.questionList = questionList;
+//    }
 }

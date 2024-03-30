@@ -14,8 +14,7 @@ import together.capstone2together.dto.SearchDto;
 import together.capstone2together.repository.TagRepository;
 import together.capstone2together.service.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +30,7 @@ public class HomeController {
     private final QuestionService questionService;
     private final PickService pickService;
     private final TagService tagService;
+    private final AnswerService answerService;
 
     @GetMapping
     public ResponseEntity<JSONObject> findItemByInterestedTag(HttpServletRequest request) {
@@ -109,16 +109,15 @@ public class HomeController {
     }
      */
     @PostMapping("/item/room/make") //해당 아이템에 방 생성하기
-    public ResponseEntity<String> makeRoom(@RequestBody String jsonString, HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<Object> makeRoom(@RequestBody String jsonString, HttpServletRequest request) throws JsonProcessingException {
 
-        String memberId1 = request.getHeader("memberId");
-        if(memberId1==null) throw new IllegalStateException("로그인 해주세요.");
+        if(request.getHeader("memberId")==null) throw new IllegalStateException("로그인 해주세요.");
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(jsonString);
 
-        Question question = questionService.makeQuestion(jsonNode.get("Question"));
-        Survey findSurvey = surveyService.save(new Survey(question));
+        List<Question> questions = questionService.makeQuestion(jsonNode.get("Question"));
+        Survey findSurvey = surveyService.save(new Survey(questions));
         JsonNode roomNode = jsonNode.get("Room");
         Long itemId = roomNode.findValue("itemId").asLong();
         String memberId = roomNode.findValue("memberId").asText();
@@ -128,21 +127,23 @@ public class HomeController {
 
         Room room = roomService.makeRoom(findItem, findMember, findSurvey, roomNode);
         roomService.save(room);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok(room);
     }
 
     @GetMapping("/item/room/apply") //해당 아이템에 지원하기 위해 설문 양식 질문 보기
     public ResponseEntity<JSONObject> applyRoom(HttpServletRequest request){
         Long roomId = Long.valueOf(request.getHeader("roomId"));
         Room findOne = roomService.findById(roomId);
-        return ResponseEntity.ok(questionService.showQuestionList(findOne.getSurvey().getQuestion()));
+        JSONObject questions = questionService.findQuestions(findOne.getSurvey());
+        return ResponseEntity.ok(questions);
     }
     /*
 {
-    "1" : "answer1",
-    "2" : "answer2"
+    "질문1 아이디" : "answer1",
+    "질문2 아이디" : "answer2"
 }
  */
+    //TODO 테스트해야함
     @PostMapping("/item/room/apply/complete") //설문 답변 달고 지원 완료하기
     public ResponseEntity<String> applyComplete(@RequestBody String jsonString, HttpServletRequest request) throws JsonProcessingException {
 
@@ -151,18 +152,24 @@ public class HomeController {
 
         Room findRoom = roomService.findById(roomId);
         Member findMember = memberService.findById(memberId);
-        Question findQuestion = findRoom.getSurvey().getQuestion();
 
         if(findRoom.getMember() == findMember) return ResponseEntity.badRequest().body("직접 생성한 방에는 지원할 수 없습니다.");
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(jsonString);
-        List<String> answerList = new ArrayList<>();
+        List<Answer> answers = new LinkedList<>();
+        Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
 
-        for (JsonNode node : jsonNode) {
-            answerList.add(node.textValue());
+        while(fields.hasNext()){
+            Map.Entry<String, JsonNode> field = fields.next();
+            Long questionId = Long.valueOf(field.getKey());
+            String reply = field.getValue().asText();
+            Answer answer = Answer.create(questionService.findById(questionId), reply);
+            answerService.save(answer);
+            answers.add(answer);
         }
-        SurveyAnswer surveyAnswer = SurveyAnswer.create(findRoom, findMember, findQuestion, answerList);
+
+        SurveyAnswer surveyAnswer = SurveyAnswer.create(findRoom, findMember, answers);
         surveyAnswerService.save(surveyAnswer);
         return ResponseEntity.ok("success");
     }

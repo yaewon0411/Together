@@ -20,7 +20,7 @@ public class SurveyService {
         return surveyRepository.save(survey);
     }
 
-    public void deleteSurvey(Survey survey){
+    public void delete(Survey survey){
         surveyRepository.delete(survey);
     }
 

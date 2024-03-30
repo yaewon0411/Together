@@ -32,6 +32,16 @@ public class SurveyAnswerService {
         validateDuplicatedSurveyAnswer(surveyAnswer);
         surveyAnswerRepository.save(surveyAnswer);
     }
+    @Transactional
+    public void delete(List<SurveyAnswer> surveyAnswers){
+        for (SurveyAnswer surveyAnswer : surveyAnswers) {
+            surveyAnswerRepository.delete(surveyAnswer);
+        }
+    }
+
+    public List<SurveyAnswer> findBySurvey(Survey survey){
+        return surveyAnswerRepository.findBySurvey(survey);
+    }
     private void validateDuplicatedSurveyAnswer(SurveyAnswer surveyAnswer) {
         List<SurveyAnswer> findList =
                 surveyAnswerRepository.findByMemberAndRoom(surveyAnswer.getMember().getId(), surveyAnswer.getRoom().getId());
