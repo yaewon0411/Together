@@ -31,7 +31,7 @@ public interface SurveyAnswerRepository extends JpaRepository<SurveyAnswer,Long>
     @Query("select sa from SurveyAnswer sa where sa.member.id = :memberId and sa.room.id = :roomId")
     List<SurveyAnswer> findByMemberAndRoom(@Param("memberId")String memberId, @Param("roomId")Long roomId);
 
-    @Query("select sa from SurveyAnswer sa where sa.member = :member and sa.status != FAIL")
+    @Query("select sa from SurveyAnswer sa where sa.member = :member and sa.status != 'FAIL'")
     List<SurveyAnswer> findByMemberExcludeFailSurvey(@Param("member")Member member);
 
 }

@@ -7,6 +7,8 @@ import together.capstone2together.domain.ItemTag;
 import together.capstone2together.domain.Member;
 import together.capstone2together.domain.MemberTag;
 import together.capstone2together.domain.Tag;
+import together.capstone2together.dto.member.MemberRespDto;
+import together.capstone2together.dto.memberTag.MemberTagRespDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,10 @@ import java.util.List;
 public class MemberTagRepository {
     private final EntityManager em;
 
-    public void save(MemberTag memberTag){
+    public MemberTagRespDto save(MemberTag memberTag){
             validateDuplicatedItemTag(memberTag);
             em.persist(memberTag);
+            return new MemberTagRespDto(memberTag.getId(), memberTag.getTag().getName());
     }
     private void validateDuplicatedItemTag(MemberTag memberTag) {
         List<MemberTag> findList = em.createQuery("select mt from MemberTag mt where mt.member = :member and mt.tag = :tag", MemberTag.class)

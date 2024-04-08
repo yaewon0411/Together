@@ -6,10 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.ItemTag;
 import together.capstone2together.domain.Tag;
 import together.capstone2together.dto.SearchDto;
+import together.capstone2together.dto.tag.TagReqDto;
+import together.capstone2together.dto.tag.TagRespDto;
 import together.capstone2together.repository.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,16 +22,20 @@ public class TagService {
     private final TagRepository tagRepository;
     private final ItemTagService itemTagService;
 
-    public void save (Tag tag){
-        if(validateDuplicatedTag(tag)) return;
-        tagRepository.save(tag);
+    public Optional<Tag> save(TagReqDto tagReqDto){
+        if(!validateDuplicatedTag(tagReqDto)) {
+            Tag tag = tagRepository.save(tagReqDto.toEntity());
+            return Optional.of(tag);
+        }
+        return Optional.empty();
     }
 
-    private boolean validateDuplicatedTag(Tag tag) {
-        List<Tag> findList = tagRepository.findByName(tag.getName());
-        if(findList.size()>0) return true;
+    private boolean validateDuplicatedTag(TagReqDto tagReqDto) {
+        Optional<Tag> tagOp = tagRepository.findByName(tagReqDto.getName());
+        if(tagOp.isPresent()) return true;
         else return false;
     }
+
     public Tag findOneByName(String name){
         return tagRepository.findOneByName(name);
     }

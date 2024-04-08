@@ -149,16 +149,16 @@ public class SurveyAnswerService {
     //회원 아이디랑 방 아이디로 설문 답변 찾기
     public JSONArray findByMemberId(String memberId, Long roomId) {
         SurveyAnswer findOne = surveyAnswerRepository.findByMemberAndRoom(memberId, roomId).get(0);
-        List<String> findQuestion = findOne.getQuestion().getQuestionList();
-        List<String> findAnswer = findOne.getAnswer();
+        List<Answer> answers = findOne.getAnswers();
 
         JSONArray array = new JSONArray();
         JSONObject obj = new JSONObject();
         obj.put("surveyAnswerId",findOne.getId());
         array.add(obj);
-        for(int i = 0;i<findQuestion.size();i++){
+
+        for (Answer answer : answers) {
             JSONObject object = new JSONObject();
-            object.put(findQuestion.get(i),findAnswer.get(i));
+            object.put(answer.getQuestion().getAsking(),answer.getReply());
             array.add(object);
         }
         return array;

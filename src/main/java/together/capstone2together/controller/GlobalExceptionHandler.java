@@ -1,4 +1,4 @@
-package together.capstone2together.Controller;
+package together.capstone2together.controller;
 
 import jakarta.persistence.NoResultException;
 import org.springframework.http.HttpStatus;

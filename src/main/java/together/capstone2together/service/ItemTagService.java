@@ -26,8 +26,8 @@ public class ItemTagService {
 
     private final RoomService roomService;
     @Transactional
-    public void save(List<ItemTag> itemTagList){
-        itemTagRepository.save(itemTagList);
+    public void save(ItemTag itemTag){
+        itemTagRepository.save(itemTag);
     }
     public JSONArray findItemByInterestedTag(List<MemberTag> memberTagList){
 

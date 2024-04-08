@@ -16,6 +16,10 @@ public class Tag {
     @Column(name = "tag_name")
     private String name;
 
+    @Builder
+    public Tag(String name){
+        this.name = name;
+    }
     public static Tag create(String name){
         Tag tag = new Tag();
         tag.setName(name);

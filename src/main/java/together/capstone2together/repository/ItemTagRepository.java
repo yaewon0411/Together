@@ -19,11 +19,8 @@ import java.util.stream.Collectors;
 public class ItemTagRepository {
     private final EntityManager em;
 
-    public void save(List<ItemTag> itemTagList){
-        for (ItemTag itemTag : itemTagList) {
-            validateDuplicatedItemTag(itemTag);
-            em.persist(itemTag);
-        }
+    public void save(ItemTag itemTag){
+        em.persist(itemTag);
     }
     private void validateDuplicatedItemTag(ItemTag itemTag) {
         List <ItemTag> findList = em.createQuery("select it from ItemTag it where it.item = :item and it.tag = :tag", ItemTag.class)

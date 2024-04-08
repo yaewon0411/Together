@@ -30,7 +30,6 @@ public class MemberTag {
         MemberTag memberTag = new MemberTag();
         memberTag.setMember(member);
         memberTag.setTag(tag);
-        memberTag.getMember().getTagList().add(memberTag);
         return memberTag;
     }
 }

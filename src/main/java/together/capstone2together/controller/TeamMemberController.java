@@ -1,4 +1,4 @@
-package together.capstone2together.Controller;
+package together.capstone2together.controller;
 
 import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
@@ -6,15 +6,12 @@ import jakarta.persistence.NoResultException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
-import together.capstone2together.dto.CreatorRoomDto;
 import together.capstone2together.service.*;
 
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor

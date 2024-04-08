@@ -40,3 +40,4 @@ out/
 src/main/resources/config
 src/main/java/together/capstone2together/config
 test/
+resources/

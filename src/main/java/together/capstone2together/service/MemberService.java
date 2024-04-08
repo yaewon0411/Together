@@ -3,41 +3,47 @@ package together.capstone2together.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.mapping.Join;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.Member;
 import together.capstone2together.dto.TagListDto;
+import together.capstone2together.dto.member.MemberReqDto;
+import together.capstone2together.dto.member.MemberRespDto;
+import together.capstone2together.ex.CustomApiException;
 import together.capstone2together.repository.MemberRepository;
 
 import java.util.List;
 import java.util.Optional;
 
+import static together.capstone2together.dto.member.MemberReqDto.*;
+import static together.capstone2together.dto.member.MemberRespDto.*;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService { //예외 처리 서비스 클래스 만들어서 나중에 다 리팩토링
-    private final PasswordEncoder passwordEncoder;
+
+    private final BCryptPasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
-    //회원 가입
+    //회원 가입 (TODO- 수정 완료)
     @Transactional
-    public void join(Member member){ //taglist도 다 채워서 넘어와야 되는 거 얘기하기
-        //비밀번호 인코딩
-        String password = member.getPassword();
-        String encodePw = passwordEncoder.encode(password);
-        member.setPassword(encodePw);
+    public JoinRespDto join(JoinReqDto joinReqDto){ //taglist도 다 채워서 넘어와야 되는 거 얘기하기
+
         //중복 회원 검증
-        validateDuplicatedMember(member);
-        //저장
-        memberRepository.save(member);
+        validateDuplicatedMember(joinReqDto);
+        //비밀번호 인코딩 + 저장
+        Member member = memberRepository.save(joinReqDto.toEntity(passwordEncoder));
+
+        return new JoinRespDto(member);
     }
-    private void validateDuplicatedMember(Member member) {
-        List<Member> findAll = memberRepository.findAll();
-        for (Member findOne : findAll) {
-            if(findOne.getId() == member.getId())
-                throw new IllegalStateException("이미 존재하는 회원입니다");
-        }
+    private void validateDuplicatedMember(JoinReqDto joinReqDto) {
+        Optional<Member> findOne
+                = memberRepository.findById(joinReqDto.getId());
+        if(findOne.isPresent()) throw new CustomApiException("이미 존재하는 아이디입니다");
     }
     //로그인
     @Transactional

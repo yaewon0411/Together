@@ -1,10 +1,7 @@
 package together.capstone2together.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.checkerframework.checker.units.qual.A;
 import together.capstone2together.service.ItemTagService;
 
@@ -28,15 +25,12 @@ public class ItemTag implements Serializable {
     @JoinColumn(name ="item_id")
     private Item item;
 
-    public static List<ItemTag> create(List<Tag>tagList, Item item){
-        List<ItemTag> itemTagList =  new ArrayList<>();
-        for (Tag tag : tagList) {
-            ItemTag itemTag = new ItemTag();
-            itemTag.setTag(tag);
-            itemTag.setItem(item);
-            item.getTagList().add(itemTag);
-            itemTagList.add(itemTag);
-        }
-        return itemTagList;
+    public static ItemTag create(Item item, Tag tag){
+        ItemTag itemTag = new ItemTag();
+        itemTag.setItem(item);
+        itemTag.setTag(tag);
+        itemTag.getItem().getTagList().add(itemTag);
+        return itemTag;
     }
+
 }

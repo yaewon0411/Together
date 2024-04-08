@@ -1,8 +1,7 @@
-package together.capstone2together.Controller;
+package together.capstone2together.controller;
 
 import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
-import jakarta.persistence.PostLoad;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

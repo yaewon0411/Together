@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import together.capstone2together.domain.Tag;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
@@ -14,8 +15,8 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
     @Query("select t from Tag t where t.name like %:keyword%")
     List<Tag> searchByTag(@Param("keyword")String keyword);
-    @Query("select t from Tag t where t.name = :name")
-    List<Tag> findByName(@Param("name")String name);
+
+    Optional<Tag> findByName(String name);
 
     @Query("select t from Tag t where t.name = :name")
     Tag findOneByName(@Param("name")String name);

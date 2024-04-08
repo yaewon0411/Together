@@ -1,4 +1,4 @@
-package together.capstone2together.Controller;
+package together.capstone2together.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +10,14 @@ import together.capstone2together.domain.Item;
 import together.capstone2together.domain.ItemTag;
 import together.capstone2together.domain.Tag;
 import together.capstone2together.dto.ItemDto;
+import together.capstone2together.dto.tag.TagReqDto;
 import together.capstone2together.service.ItemService;
 import together.capstone2together.service.ItemTagService;
 import together.capstone2together.service.TagService;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,24 +30,16 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<String> addItem(@RequestBody ItemDto dto){
 
-        //태그 먼저 저장
-        List<String> tagList = dto.getTagList();
-        List<Tag> findList = new ArrayList<>();
-        for (String name : tagList) {
-            Tag tag = Tag.create(name);
-            tagService.save(tag);
-            findList.add(tagService.findOneByName(tag.getName()));
-        }
         //아이템 저장
-        Item item = Item.create(dto.getTitle(), dto.getContent(), dto.getSponsor() , dto.getDeadline(), dto.getHomepage(), dto.getImg());
-        Item findOne = itemService.save(item);
+        Item item = itemService
+                .save(Item.create(dto.getTitle(), dto.getContent(), dto.getSponsor() , dto.getDeadline(), dto.getHomepage(), dto.getImg()));
 
-        //아이템-태그 저장
-        List<ItemTag> itemTagList = ItemTag.create(findList, findOne);
-        for (ItemTag itemTag : itemTagList) {
-            System.out.println("itemTag.getTag().getName() = " + itemTag.getTag().getName());
+        //태그  저장
+        List<String> tagList = dto.getTagList();
+        for (String tagName : tagList) {
+            Optional<Tag> tag = tagService.save(new TagReqDto(tagName));
+            tag.ifPresent(value -> itemTagService.save(ItemTag.create(item, value)));
         }
-        itemTagService.save(itemTagList);
 
         return ResponseEntity.ok("success");
     }

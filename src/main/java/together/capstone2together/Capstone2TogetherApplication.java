@@ -6,6 +6,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import together.capstone2together.domain.ItemTag;
 import together.capstone2together.domain.Member;
 import together.capstone2together.domain.MemberTag;
@@ -19,6 +20,7 @@ import java.util.List;
 
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class Capstone2TogetherApplication {
 
 	public static void main(String[] args) throws Exception {

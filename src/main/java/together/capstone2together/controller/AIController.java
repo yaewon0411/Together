@@ -1,9 +1,7 @@
-package together.capstone2together.Controller;
+package together.capstone2together.controller;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +10,6 @@ import together.capstone2together.domain.Item;
 import together.capstone2together.domain.Member;
 import together.capstone2together.domain.Pick;
 import together.capstone2together.service.*;
-
-import java.util.List;
-import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
