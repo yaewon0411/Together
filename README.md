@@ -32,4 +32,5 @@ public class CustomValidationAdvice {
         ....
     }
 ```
-
+### 오류 해결 내역
+- com.fasterxml.jackson.databind.exc.InvalidDefinitionException: No serializer found for class : Jackson이 객체를 JSON으로 변환할 방법을 찾지 못해서 발생. ItemRespDto에 private 필드에 대한 게터 메서드가 없었음. 따라서 이를 수정
