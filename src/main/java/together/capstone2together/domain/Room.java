@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import together.capstone2together.domain.member.Member;
 
-import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
 

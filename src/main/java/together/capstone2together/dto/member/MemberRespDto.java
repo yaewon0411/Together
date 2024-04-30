@@ -1,12 +1,21 @@
 package together.capstone2together.dto.member;
 
 import lombok.Data;
-import together.capstone2together.domain.Member;
-
-import java.util.ArrayList;
-import java.util.List;
+import together.capstone2together.domain.member.Member;
+import together.capstone2together.util.CustomDateUtil;
 
 public class MemberRespDto {
+
+    @Data
+    public static class LoginRespDto{
+        private String id;
+        private String createdAt;
+
+        public LoginRespDto(Member member) {
+            this.id = member.getId();
+            this.createdAt = CustomDateUtil.toStringFormat(member.getCreatedAt());
+        }
+    }
     @Data
     public static class JoinRespDto{
         private String id;

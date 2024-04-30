@@ -1,17 +1,14 @@
 package together.capstone2together.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.AI;
 import together.capstone2together.domain.Item;
-import together.capstone2together.domain.Member;
+import together.capstone2together.domain.member.Member;
 import together.capstone2together.repository.AiRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor

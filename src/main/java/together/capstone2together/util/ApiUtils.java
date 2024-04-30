@@ -10,7 +10,7 @@ public class ApiUtils {
         return new ApiResult<>(true, response, null);
     }
     public static ApiResult<?> error(String msg, int status){
-        return new ApiResult<>(false,null, new ApiError(msg, status));
+        return new ApiResult<>(false, null, new ApiError(msg, status));
     }
     public static <T>ApiResult<?> error(String msg, T response, int status){
         return new ApiResult<>(false, response, new ApiError(msg, status));

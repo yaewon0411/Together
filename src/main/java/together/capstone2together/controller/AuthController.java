@@ -2,33 +2,21 @@ package together.capstone2together.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import together.capstone2together.domain.Member;
+import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.MemberTag;
 import together.capstone2together.domain.Tag;
-import together.capstone2together.dto.JoinDto;
-import together.capstone2together.dto.LoginDto;
-import together.capstone2together.dto.ResponseDto;
-import together.capstone2together.dto.member.MemberReqDto;
-import together.capstone2together.dto.member.MemberRespDto;
-import together.capstone2together.dto.memberTag.MemberTagRespDto;
 import together.capstone2together.dto.tag.TagReqDto;
-import together.capstone2together.dto.tag.TagRespDto;
-import together.capstone2together.service.MemberService;
+import together.capstone2together.domain.member.MemberService;
 import together.capstone2together.service.MemberTagService;
 import together.capstone2together.service.TagService;
 import together.capstone2together.util.ApiUtils;
 
-import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static together.capstone2together.dto.member.MemberReqDto.*;
@@ -59,9 +47,10 @@ public class AuthController {
 
     //TODO - 로그인 수정
     @PostMapping("/login") //로그인
-    public ResponseEntity<String> login(@RequestBody LoginDto dto){
-        memberService.login(dto.getId(), dto.getPassword());
-        return ResponseEntity.ok("login success");
+    public ResponseEntity<?> login(@RequestBody LoginReqDto dto){
+        LoginRespDto loginRespDto = memberService.login(dto.getId(), dto.getPassword());
+        return new ResponseEntity<>(ApiUtils.success(loginRespDto), HttpStatus.OK);
+        //return ResponseEntity.ok("login success");
     }
 
 }

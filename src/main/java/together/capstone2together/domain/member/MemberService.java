@@ -1,21 +1,14 @@
-package together.capstone2together.service;
+package together.capstone2together.domain.member;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.mapping.Join;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.Member;
-import together.capstone2together.dto.TagListDto;
-import together.capstone2together.dto.member.MemberReqDto;
-import together.capstone2together.dto.member.MemberRespDto;
 import together.capstone2together.ex.CustomApiException;
-import together.capstone2together.repository.MemberRepository;
+import together.capstone2together.util.ApiUtils;
 
-import java.util.List;
 import java.util.Optional;
 
 import static together.capstone2together.dto.member.MemberReqDto.*;
@@ -47,22 +40,21 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
     }
     //로그인
     @Transactional
-    public Member login(String id, String password){
+    public LoginRespDto login(String id, String password){
 
-        if(id==null || password==null) return null;
+        if(id == null || password == null) return null;
 
         Optional<Member> findOne = memberRepository.findById(id);
         if(findOne.isPresent()){
             if(passwordEncoder.matches(password, findOne.get().getPassword())) //인코딩된 비밀번호와 일치하면 true
-                return findOne.get();
-            else //일치 안하면 false
-                throw new IllegalStateException("비밀번호가 일치하지 않습니다."); //null로 반환할 지 예외로 반환할 지 얘기해보기
-                //return null; //비밀번호가 일치하지 않습니다.
+                return new LoginRespDto(findOne.get());
+            else
+                throw new CustomApiException("비밀번호가 일치하지 않습니다");
         }
-        else 
-            throw new NoResultException("존재하지 않는 아이디입니다.");
-            //return null; //존재하지 않는 아이디입니다
+        else
+            throw new CustomApiException("존재하지 않는 아이디입니다");
     }
+
     //포인트 조회
     public int SearchPoint(String id){
         return memberRepository.findById(id).get().getPoint();

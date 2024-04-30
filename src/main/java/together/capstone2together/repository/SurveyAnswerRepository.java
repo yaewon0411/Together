@@ -1,15 +1,12 @@
 package together.capstone2together.repository;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import together.capstone2together.domain.Member;
-import together.capstone2together.domain.Room;
+import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.Survey;
 import together.capstone2together.domain.SurveyAnswer;
-import together.capstone2together.dto.MemberDto;
 import together.capstone2together.dto.RoomDto;
 
 import java.util.List;

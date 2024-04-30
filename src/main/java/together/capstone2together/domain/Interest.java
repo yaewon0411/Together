@@ -2,6 +2,7 @@ package together.capstone2together.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import together.capstone2together.domain.member.Member;
 
 @Entity
 @Getter @Setter

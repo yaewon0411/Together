@@ -10,6 +10,8 @@ import together.capstone2together.domain.*;
 import together.capstone2together.dto.ChangeKakaotalkIdDto;
 import together.capstone2together.dto.ChangePwDto;
 import together.capstone2together.dto.TagListDto;
+import together.capstone2together.domain.member.Member;
+import together.capstone2together.domain.member.MemberService;
 import together.capstone2together.service.*;
 
 import java.util.List;

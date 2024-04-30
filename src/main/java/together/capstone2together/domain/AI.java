@@ -5,9 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.security.ProtectionDomain;
-import java.util.List;
+import together.capstone2together.domain.member.Member;
 
 @Entity
 @Getter @Setter

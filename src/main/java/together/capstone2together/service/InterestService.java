@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.*;
+import together.capstone2together.domain.member.Member;
 import together.capstone2together.repository.InterestRepository;
-import together.capstone2together.repository.PickRepository;
 
 import java.util.Optional;
 

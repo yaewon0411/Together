@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
+import together.capstone2together.domain.member.Member;
+import together.capstone2together.domain.member.MemberService;
 import together.capstone2together.service.*;
 
 

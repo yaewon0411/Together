@@ -3,11 +3,9 @@ package together.capstone2together.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.Member;
+import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.MemberTag;
 import together.capstone2together.domain.Tag;
-import together.capstone2together.dto.TagListDto;
-import together.capstone2together.dto.member.MemberRespDto;
 import together.capstone2together.dto.memberTag.MemberTagRespDto;
 import together.capstone2together.repository.MemberTagRepository;
 
