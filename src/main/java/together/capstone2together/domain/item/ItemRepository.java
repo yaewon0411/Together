@@ -1,12 +1,14 @@
-package together.capstone2together.repository;
+package together.capstone2together.domain.item;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import together.capstone2together.domain.Item;
+import together.capstone2together.domain.item.Item;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
@@ -33,7 +35,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "and i.img is not null and i.homepage is not null")
     List<Item> searchedItem(@Param("keyword") String keyword);
 
-    List<Item> findByTitleAndDeadline(String title, String deadline);
+    Optional<Item> findByTitleAndDeadline(String title, String deadline);
 
 
 

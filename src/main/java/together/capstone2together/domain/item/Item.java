@@ -1,12 +1,16 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.item;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import together.capstone2together.domain.ItemTag;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
@@ -14,6 +18,7 @@ import java.io.Serializable;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class Item implements Serializable { //크롤링 결과 저장
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="item_id")
@@ -26,6 +31,10 @@ public class Item implements Serializable { //크롤링 결과 저장
     private String deadline;//마감기한 -> "yyyy-mm-dd"으로
     private String homepage;//이거 추가할 것 -> 주최 기관 홈페이지 -> 컨트롤러에서 이것도 내보내도록 수정해야함
     private int views; //조회수
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "item",cascade = CascadeType.REMOVE)
     private List<ItemTag> tagList = new ArrayList<>();

@@ -1,6 +1,7 @@
 package together.capstone2together.dto.member;
 
 import lombok.Data;
+import lombok.ToString;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.util.CustomDateUtil;
 

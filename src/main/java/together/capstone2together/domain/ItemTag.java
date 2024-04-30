@@ -2,11 +2,8 @@ package together.capstone2together.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.checkerframework.checker.units.qual.A;
-import together.capstone2together.service.ItemTagService;
+import together.capstone2together.domain.item.Item;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.io.Serializable;
 
 @Entity

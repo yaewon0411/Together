@@ -5,12 +5,12 @@ import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.Item;
-import together.capstone2together.domain.MemberTag;
+import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.Room;
 import together.capstone2together.dto.SearchDto;
-import together.capstone2together.repository.ItemRepository;
-import together.capstone2together.repository.RoomRepository;
+import together.capstone2together.domain.item.ItemRepository;
+import together.capstone2together.ex.CustomApiException;
+import together.capstone2together.util.CustomDataUtil;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,20 +19,21 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ItemService {
     private final ItemRepository itemRepository;
     private final SubService subService;
     private final RoomService roomService;
 
+    @Transactional
     public Item save(Item item){
         validateDuplicatedItem(item);
         return itemRepository.save(item);
     }
 
     private void validateDuplicatedItem(Item item) {
-        List<Item> findList = itemRepository.findByTitleAndDeadline(item.getTitle(), item.getDeadline());
-        if(findList.size()>0) throw new IllegalStateException("중복된 아이템 입니다.");
+        if(itemRepository.findByTitleAndDeadline(item.getTitle(), item.getDeadline()).isPresent())
+            throw new CustomApiException("이미 존재하는 대외활동 입니다.");
     }
 
     //실시간 인기 활동
@@ -46,7 +47,7 @@ public class ItemService {
             if(findRoom == null) size = 0;
             else size = findRoom.getRoomMemberList().size();
             JSONObject object = new JSONObject();
-            array.add(subService.makeObject(item, object, size));
+            array.add(CustomDataUtil.makeObject(item, object, size));
         }
         return array;
     }
@@ -69,7 +70,7 @@ public class ItemService {
             if(findRoom == null) size = 0;
             else size = findRoom.getRoomMemberList().size();
             JSONObject object = new JSONObject();
-            array.add(subService.makeObject(item, object, size));
+            array.add(CustomDataUtil.makeObject(item, object, size));
         }
         return array;
     }
@@ -83,7 +84,7 @@ public class ItemService {
             if(findRoom == null) size = 0;
             else size = findRoom.getRoomMemberList().size();
             JSONObject object = new JSONObject();
-            array.add(subService.makeObject(item, object, size));
+            array.add(CustomDataUtil.makeObject(item, object, size));
         }
         return array;
     }

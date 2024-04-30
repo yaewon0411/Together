@@ -7,13 +7,16 @@ import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
+import together.capstone2together.domain.item.Item;
 import together.capstone2together.dto.SearchDto;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.member.MemberService;
 import together.capstone2together.service.*;
+import together.capstone2together.util.ApiUtils;
 
 import java.util.*;
 
@@ -35,9 +38,9 @@ public class HomeController {
     private final AnswerService answerService;
 
     @GetMapping
-    public ResponseEntity<JSONObject> findItemByInterestedTag(HttpServletRequest request) {
-        String memberId = request.getHeader("memberId");
-        Member findOne = memberService.findById(memberId);
+    public ResponseEntity<?> findItemByInterestedTag(HttpServletRequest request) {
+
+        Member findOne = memberService.findById(request.getHeader("memberId"));
         List<MemberTag> tagList = memberTagService.findByMember(findOne);
 
         JSONObject result = new JSONObject();
@@ -47,7 +50,7 @@ public class HomeController {
         result.put("내가 관심 있는 활동", itemTagService.findItemByInterestedTag(tagList));
         result.put("최근 추가된 활동", itemService.getRecentlyAddedItem());
 
-        return ResponseEntity.ok(result);
+        return new ResponseEntity<>(ApiUtils.success(result), HttpStatus.OK);
     }
 
     @GetMapping("/item") //홈 화면에서 특정 아이템 누르면 그 아이템의 상세 정보가 나오도록

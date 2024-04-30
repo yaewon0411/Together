@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class ItemDto {
+
     private String title;
     private String content;
     private String sponsor;

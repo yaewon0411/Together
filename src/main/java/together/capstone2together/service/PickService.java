@@ -5,11 +5,12 @@ import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.Item;
+import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.Pick;
 import together.capstone2together.domain.Room;
 import together.capstone2together.repository.PickRepository;
+import together.capstone2together.util.CustomDataUtil;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class PickService {
             if(findRoom == null) size = 0;
             else size = findRoom.getRoomMemberList().size();
             JSONObject object = new JSONObject();
-            array.add(subService.makeObject(item, object,size));
+            array.add(CustomDataUtil.makeObject(item, object,size));
         }
         return array;
     }

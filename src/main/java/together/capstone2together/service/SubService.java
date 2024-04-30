@@ -1,9 +1,8 @@
 package together.capstone2together.service;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import together.capstone2together.domain.Item;
+import together.capstone2together.domain.item.Item;
 
 import java.time.Duration;
 import java.time.LocalDate;

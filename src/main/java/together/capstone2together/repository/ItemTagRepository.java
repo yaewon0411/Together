@@ -3,7 +3,7 @@ package together.capstone2together.repository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import together.capstone2together.domain.Item;
+import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.ItemTag;
 import together.capstone2together.domain.Tag;
 import together.capstone2together.dto.ItemIdDto;

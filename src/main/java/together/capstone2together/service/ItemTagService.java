@@ -7,9 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.*;
-import together.capstone2together.dto.ItemIdDto;
+import together.capstone2together.domain.item.Item;
 import together.capstone2together.dto.SearchDto;
 import together.capstone2together.repository.ItemTagRepository;
+import together.capstone2together.util.CustomDataUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,24 +46,10 @@ public class ItemTagService {
             List<Room> roomList = roomService.getRoomListByItem(item);
             int size = roomList.size();
             JSONObject object = new JSONObject();
-            array.add(subService.makeObject(item, object, size));
+            array.add(CustomDataUtil.makeObject(item, object, size));
 
         }
         return array;
-//
-//        for (ItemTag itemTag : findList) {
-//            List<ItemIdDto> itemIdList = itemTagRepository.findItemByItemTag(itemTag);
-//            for (ItemIdDto dto: itemIdList) {
-//                Room findRoom = roomService.findById(dto.getId());
-//                Item item = itemService.findById(dto.getId());
-//                int size;
-//                if(findRoom == null) size = 0;
-//                else size = findRoom.getRoomMemberList().size();
-//                JSONObject object = new JSONObject();
-//                array.add(subService.makeObject(item, object,size));
-//            }
-//        }
-//        return array;
     }
 
     private Object makeObject(ItemTag itemTag, JSONObject object) {
