@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.engine.IThrottledTemplateWriterControl;
 import together.capstone2together.ex.CustomApiException;
 import together.capstone2together.util.ApiUtils;
 
@@ -66,11 +67,11 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
     }
     //비밀번호 변경
     @Transactional
-    public void changePw(Member member, String newPassword){
-        if (member == null || newPassword == null) {
-            throw new IllegalArgumentException("인자가 올바르지 않습니다.");
+    public void changePw(Member member, ChangePwReqDto changePwReqDto){
+        if (member == null || changePwReqDto.getPassword() == null) {
+            throw new CustomApiException("비밀번호를 변경하기 위한 인자가 올바르지 않습니다.");
         }
-        member.setPassword(passwordEncoder.encode(newPassword));
+        member.setPassword(passwordEncoder.encode(changePwReqDto.getPassword()));
     }
     public Member findById(String id){
         Optional<Member> findOne = memberRepository.findById(id);

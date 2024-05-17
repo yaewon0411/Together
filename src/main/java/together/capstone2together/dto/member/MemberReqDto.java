@@ -12,6 +12,15 @@ import java.util.List;
 public class MemberReqDto {
 
     @Data
+    public static class ChangePwReqDto{
+        private String password;
+
+        public ChangePwReqDto(String password) {
+            this.password = password;
+        }
+    }
+
+    @Data
     public static class ChangeKakaotalkIdReqDto{
         private String kakaotalkId;
     }

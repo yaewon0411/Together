@@ -71,12 +71,12 @@ public class MyController {
         }
        return ResponseEntity.ok("success");
     }
-    //비밀번호 재설정
-    @PostMapping("/pw")
-    public ResponseEntity<String> changePw(HttpServletRequest request, @RequestBody ChangePwDto dto){
+
+    @PostMapping("/pw") //비밀번호 재설정
+    public ResponseEntity<?> changePw(HttpServletRequest request, @RequestBody ChangePwReqDto changePwReqDto){
         String memberId = request.getHeader("memberId");
-        memberService.changePw(memberService.findById(memberId), dto.getChangePw());
-        return ResponseEntity.ok("비밀번호 재설정 완료");
+        memberService.changePw(memberService.findById(memberId), changePwReqDto);
+        return new ResponseEntity<>(ApiUtils.success("비밀번호 변경 완료"),HttpStatus.OK);
     }
     @PostMapping("/kakaotalkId")
     public ResponseEntity<?> changeKakaotalkId(HttpServletRequest request, @RequestBody ChangeKakaotalkIdReqDto changeKakaotalkIdDto){
