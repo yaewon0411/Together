@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import together.capstone2together.domain.member.Member;
+import together.capstone2together.domain.room.Room;
 
 @Entity
 @Getter @Setter

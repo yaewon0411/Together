@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
 import together.capstone2together.domain.item.Item;
+import together.capstone2together.domain.room.Room;
+import together.capstone2together.domain.room.RoomService;
 import together.capstone2together.dto.SearchDto;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.member.MemberService;
@@ -73,18 +75,17 @@ public class HomeController {
     }
 
     @GetMapping("/item/room") //해당 아이템에 생성된 방들 불러오기
-    public ResponseEntity<JSONArray> getAllRoom(HttpServletRequest request){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
+    public ResponseEntity<?> getAllRoom(HttpServletRequest request){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
         Long itemId = Long.valueOf(request.getHeader("itemId"));
         Item findOne = itemService.findById(itemId);
-        return ResponseEntity.ok(roomService.findByItem(findOne));
+        return new ResponseEntity<>(ApiUtils.success(roomService.findByItemList(findOne)),HttpStatus.OK);
     }
     @GetMapping("/search")
-    public ResponseEntity<List<SearchDto>> searchItems(@RequestParam String keyword) {
+    public ResponseEntity<?> searchItems(@RequestParam String keyword) {
         List<SearchDto> firstList = itemService.searchItems(keyword);
-        //List<SearchDto> secondList = itemTagService.searchItems(keyword);
         List<SearchDto> secondList = tagService.searchItems(keyword);
         firstList.addAll(secondList);
-        return ResponseEntity.ok(firstList);
+        return new ResponseEntity<>(ApiUtils.success(firstList),HttpStatus.OK);
     }
 
     //아이템 검색하기 -> 제목, 상세내용, 태그 등으로 검색

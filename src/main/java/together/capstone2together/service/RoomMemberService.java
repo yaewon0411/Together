@@ -6,10 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.*;
+import together.capstone2together.domain.room.Room;
 import together.capstone2together.dto.ShowAllDto;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.repository.RoomMemberRepository;
-import together.capstone2together.repository.RoomRepository;
+import together.capstone2together.domain.room.RoomRepository;
 
 import java.util.List;
 

@@ -74,7 +74,7 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
     }
     public Member findById(String id){
         Optional<Member> findOne = memberRepository.findById(id);
-        if(findOne.isEmpty()) throw new NoResultException("해당 회원은 존재하지 않습니다.");
+        if(findOne.isEmpty()) throw new CustomApiException("해당 회원은 존재하지 않습니다.");
         return findOne.get();
     }
 
@@ -86,9 +86,4 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
         member.setKakaotalkId(kakaotalkId);
     }
 
-    public boolean findByKakaotalkId(String kakaotalkId) {
-        Member member = memberRepository.findByKakaotalkId(kakaotalkId);
-        if(member != null) return false;
-        else return true;
-    }
 }

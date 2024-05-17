@@ -1,10 +1,12 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.room;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import together.capstone2together.domain.RoomMember;
+import together.capstone2together.domain.Survey;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.member.Member;
 

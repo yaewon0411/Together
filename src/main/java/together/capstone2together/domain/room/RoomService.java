@@ -1,4 +1,4 @@
-package together.capstone2together.service;
+package together.capstone2together.domain.room;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.nimbusds.jose.shaded.json.JSONArray;
@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.member.Member;
-import together.capstone2together.domain.Room;
+import together.capstone2together.domain.room.Room;
 import together.capstone2together.domain.Survey;
+import together.capstone2together.ex.CustomApiException;
 import together.capstone2together.repository.RoomMemberRepository;
-import together.capstone2together.repository.RoomRepository;
+import together.capstone2together.domain.room.RoomRepository;
+import together.capstone2together.service.SubService;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,10 +43,11 @@ public class RoomService {
     }
 
     //아이템에 생성된 방 리스트 보기
-    public JSONArray findByItem(Item item){
+    public JSONArray findByItemList(Item item){
         List<Room> findList = roomRepository.findByItem(item);
         JSONArray array = new JSONArray();
         if(findList.size()==0) return array;
+
         for (Room room : findList) {
             JSONObject object = new JSONObject();
             object.put("title",room.getTitle());
@@ -89,8 +92,8 @@ public class RoomService {
         if(findOne.getCapacity() == count) return true;
         else return false;
     }
-    public Room findById(Long id){
-        Optional<Room> byId = roomRepository.findById(id);
+    public Room findById(Long itemId){
+        Optional<Room> byId = roomRepository.findById(itemId);
         if(byId.isEmpty()) return null;
         else return byId.get();
     }

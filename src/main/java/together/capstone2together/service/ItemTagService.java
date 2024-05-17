@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.*;
 import together.capstone2together.domain.item.Item;
+import together.capstone2together.domain.room.Room;
+import together.capstone2together.domain.room.RoomService;
 import together.capstone2together.dto.SearchDto;
 import together.capstone2together.repository.ItemTagRepository;
 import together.capstone2together.util.CustomDataUtil;

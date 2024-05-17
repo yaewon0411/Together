@@ -1,7 +1,6 @@
 package together.capstone2together.dto;
 
 import lombok.Data;
-import together.capstone2together.domain.Room;
 import together.capstone2together.domain.Status;
 
 import java.time.LocalDateTime;

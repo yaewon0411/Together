@@ -4,6 +4,7 @@ import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
@@ -13,6 +14,7 @@ import together.capstone2together.dto.TagListDto;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.member.MemberService;
 import together.capstone2together.service.*;
+import together.capstone2together.util.ApiUtils;
 
 import java.util.List;
 
@@ -80,10 +82,9 @@ public class MyController {
     }
     //관심있는 활동 -> pick 한 아이템들 리스트로 내보내기
     @GetMapping("/pick")
-    public ResponseEntity<JSONArray> getPickItems(HttpServletRequest request){
+    public ResponseEntity<?> getPickItems(HttpServletRequest request){
         Member findOne = memberService.findById(request.getHeader("memberId"));
-        //sub서비스 makeobject쓰려면 item이랑 jsonobject 빈 객체 같이 넘겨야 함
-        return ResponseEntity.ok(pickService.findByMember(findOne));
+        return new ResponseEntity<>(ApiUtils.success(pickService.getPickItemList(findOne)), HttpStatus.OK);
     }
 
 

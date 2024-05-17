@@ -2,12 +2,11 @@ package together.capstone2together.domain.member;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import together.capstone2together.domain.Pick;
-import together.capstone2together.domain.Room;
+import together.capstone2together.domain.room.Room;
 import together.capstone2together.domain.RoomMember;
 
 import java.io.Serializable;

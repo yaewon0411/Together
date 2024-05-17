@@ -16,6 +16,7 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
     @Query("select i from Pick p join p.item i where p.member = :member")
     List<Item> findByMember(@Param("member") Member member); //마감기한 지나면 거르기
 
+
     @Query("select p from Pick p where p.member = :member and p.item = :item")
     List<Pick> findByMemberAndItem(@Param("member")Member member, @Param("item")Item item);
 
