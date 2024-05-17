@@ -98,6 +98,14 @@ public class RoomService {
         else return byId.get();
     }
 
+    public int getRoomCountInItem(Item item){
+        List<Room> findRooms = roomRepository.findByItem(item);
+        return findRooms.isEmpty()? 0 : findRooms.size();
+    }
+
+
+
+
 
     /*
       "Room" : {

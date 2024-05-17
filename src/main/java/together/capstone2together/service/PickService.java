@@ -57,17 +57,18 @@ public class PickService {
         return array;
     }
 
-    //TODO - joinedNumber 내보내는 거 좀 살펴봐야 할 거 같음. 해당 아이템에 여러 방이 생성되는데, 그 방의 개수가 아니라, 방에 joinedNumber를 내보내고 있음. UI 다시 봐보기
+  // TODO joinedNumber가 아니라, 해당 아이템에 만들어진 방 개수를 내보내는 걸로!!
     public List<PickItemRespDto> getPickItemList(Member member){
         List<Item> findList = pickRepository.findByMember(member);
         return findList.stream().map(item -> {
             Room room = roomService.findById(item.getId());
+            //int roomCountInItem = roomService.getRoomCountInItem(item);
             return PickItemRespDto.builder()
                     .itemId(item.getId())
                     .dDay(CustomDataUtil.makeDday(item.getDeadline()))
                     .img(item.getImg())
                     .views(item.getViews())
-                    .joinedNumber(room==null?1:room.getRoomMemberList().size()+1)
+                    .createdRoomCount(roomService.getRoomCountInItem(item))
                     .sponsor(item.getSponsor())
                     .title(item.getTitle())
                     .build();

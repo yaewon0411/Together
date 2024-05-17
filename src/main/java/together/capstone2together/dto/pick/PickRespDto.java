@@ -13,16 +13,16 @@ public class PickRespDto {
         private String img;
         private String dDay;
         private String title;
-        private int joinedNumber;
+        private int createdRoomCount;
         private int views;
 
-        public PickItemRespDto(Long itemId, String sponsor, String img, String dDay, String title, int joinedNumber, int views) {
+        public PickItemRespDto(Long itemId, String sponsor, String img, String dDay, String title, int createdRoomCount, int views) {
             this.itemId = itemId;
             this.sponsor = sponsor;
             this.img = img;
             this.dDay = dDay;
             this.title = title;
-            this.joinedNumber = joinedNumber;
+            this.createdRoomCount = createdRoomCount;
             this.views = views;
         }
     }

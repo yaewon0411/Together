@@ -8,6 +8,15 @@ import together.capstone2together.util.CustomDateUtil;
 public class MemberRespDto {
 
     @Data
+    public static class ChangeKakaotalkIdRespDto{
+        private String kakaotalkId;
+
+        public ChangeKakaotalkIdRespDto(String kakaotalkId) {
+            this.kakaotalkId = kakaotalkId;
+        }
+    }
+
+    @Data
     public static class LoginRespDto{
         private String id;
         private String createdAt;

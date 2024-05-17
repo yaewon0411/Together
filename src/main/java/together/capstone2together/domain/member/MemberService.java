@@ -79,11 +79,12 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
     }
 
     @Transactional
-    public void changeKakaotalkId(Member member, String kakaotalkId) {
-        if(member == null || kakaotalkId == null ){
-            throw new IllegalArgumentException("인자가 올바르지 않습니다.");
+    public ChangeKakaotalkIdRespDto changeKakaotalkId(Member member, ChangeKakaotalkIdReqDto changeKakaotalkIdDto) {
+        if(member == null || changeKakaotalkIdDto.getKakaotalkId() == null ){
+            throw new CustomApiException("카카오톡 아이디를 변경하기 위한 인자가 올바르지 않습니다.");
         }
-        member.setKakaotalkId(kakaotalkId);
+        member.setKakaotalkId(changeKakaotalkIdDto.getKakaotalkId());
+        return new ChangeKakaotalkIdRespDto("카카오톡 아이디 변경 완료");
     }
 
 }
