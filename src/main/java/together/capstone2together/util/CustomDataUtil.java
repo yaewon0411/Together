@@ -1,13 +1,31 @@
 package together.capstone2together.util;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
+import lombok.Builder;
+import lombok.Data;
+import together.capstone2together.domain.SurveyAnswer;
 import together.capstone2together.domain.item.Item;
+import together.capstone2together.domain.member.Member;
+import together.capstone2together.dto.member.MemberRespDto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.List;
+
+import static together.capstone2together.dto.member.MemberRespDto.*;
 
 public class CustomDataUtil {
+
+    public static MyInfoRespDto makeMyInfo(Member member, List<SurveyAnswer> surveyAnswers){
+        return new MyInfoRespDto().builder()
+                .point(member.getPoint())
+                .name(member.getName())
+                .createdRoomCnt(member.getLedRooms().size())
+                .applyRoomCnt(surveyAnswers.size())
+                .build();
+    }
+
 
     public static Object makeObject(Item item, JSONObject object, int joinedNumber) {
         object.put("title", item.getTitle());

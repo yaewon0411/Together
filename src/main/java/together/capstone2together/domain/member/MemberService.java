@@ -56,15 +56,7 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
             throw new CustomApiException("존재하지 않는 아이디입니다");
     }
 
-    //포인트 조회
-    public int SearchPoint(String id){
-        return memberRepository.findById(id).get().getPoint();
-    }
-    //닉네임 변경
-    @Transactional
-    public void changeName(String id, String newName){
-        memberRepository.updateName(id, newName);
-    }
+
     //비밀번호 변경
     @Transactional
     public void changePw(Member member, ChangePwReqDto changePwReqDto){
@@ -73,6 +65,7 @@ public class MemberService { //예외 처리 서비스 클래스 만들어서 �
         }
         member.setPassword(passwordEncoder.encode(changePwReqDto.getPassword()));
     }
+
     public Member findById(String id){
         Optional<Member> findOne = memberRepository.findById(id);
         if(findOne.isEmpty()) throw new CustomApiException("해당 회원은 존재하지 않습니다.");

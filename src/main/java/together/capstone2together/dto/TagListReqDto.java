@@ -6,6 +6,6 @@ import together.capstone2together.domain.Tag;
 import java.util.List;
 
 @Data
-public class TagListDto {
+public class TagListReqDto {
     private List<String> tagList;
 }

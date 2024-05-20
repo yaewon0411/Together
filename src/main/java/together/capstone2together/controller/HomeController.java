@@ -3,7 +3,6 @@ package together.capstone2together.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
 import together.capstone2together.domain.item.Item;
+import together.capstone2together.domain.memberTag.MemberTag;
+import together.capstone2together.domain.memberTag.MemberTagService;
 import together.capstone2together.domain.room.Room;
 import together.capstone2together.domain.room.RoomService;
 import together.capstone2together.dto.SearchDto;
@@ -42,8 +43,7 @@ public class HomeController {
     @GetMapping
     public ResponseEntity<?> findItemByInterestedTag(HttpServletRequest request) {
 
-        Member findOne = memberService.findById(request.getHeader("memberId"));
-        List<MemberTag> tagList = memberTagService.findByMember(findOne);
+        List<MemberTag> tagList = memberTagService.findByMember(memberService.findById(request.getHeader("memberId")));
 
         JSONObject result = new JSONObject();
 

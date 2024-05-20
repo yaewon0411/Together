@@ -1,22 +1,21 @@
 package together.capstone2together.controller;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
-import together.capstone2together.dto.ChangePwDto;
-import together.capstone2together.dto.TagListDto;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.member.MemberService;
-import together.capstone2together.dto.member.MemberReqDto;
+import together.capstone2together.domain.memberTag.MemberTagService;
+import together.capstone2together.dto.TagListReqDto;
 import together.capstone2together.dto.member.MemberRespDto;
 import together.capstone2together.dto.member.MemberRespDto.ChangeKakaotalkIdRespDto;
+import together.capstone2together.dto.tag.TagReqDto;
 import together.capstone2together.service.*;
 import together.capstone2together.util.ApiUtils;
+import together.capstone2together.util.CustomDataUtil;
 
 import java.util.List;
 
@@ -36,40 +35,27 @@ public class MyController {
 
     //포인트 조회, 개설한 방 수, 지원한 방 수(waiting, pass), 닉네임(name), 아이디 내보내기
     @GetMapping
-    public ResponseEntity<JSONObject> myInfo(HttpServletRequest request){
-        String memberId = request.getHeader("memberId");
-        Member findMember = memberService.findById(memberId);
+    public ResponseEntity<?> myInfo(HttpServletRequest request){
+        Member findMember = memberService.findById(request.getHeader("memberId"));
         List<SurveyAnswer> findAnswerList = surveyAnswerService.findByMemberExcludeFailSurvey(findMember);
 
-        int point = findMember.getPoint();
-        String name = findMember.getName();
-        int createdRoomCnt = findMember.getLedRooms().size();
-        int applyRoomCnt = findAnswerList.size();
+        MemberRespDto.MyInfoRespDto myInfoRespDto = CustomDataUtil.makeMyInfo(findMember, findAnswerList);
 
-        JSONObject object = new JSONObject();
-        object.put("point", point);
-        object.put("name", name);
-        object.put("createdRoomCnt", createdRoomCnt);
-        object.put("applyRoomCnt", applyRoomCnt);
-
-        return ResponseEntity.ok(object);
+        return new ResponseEntity<>(ApiUtils.success(myInfoRespDto),HttpStatus.OK);
     }
     /*
     태그 리스트 재설정
         {"tags": ["기술", "예술", "여행"]}
      */
-    @PostMapping("/tags")
-    public ResponseEntity<String> changeInterestedTag(@RequestBody TagListDto dto, HttpServletRequest request){
+    @PutMapping("/tags")
+    public ResponseEntity<?> changeInterestedTag(@RequestBody TagListReqDto tagListReqDto, HttpServletRequest request){
+        Member findMember = memberService.findById(request.getHeader("memberId"));
+        // tag 저장
+        tagListReqDto.getTagList().stream().map(tagName -> tagService.save(new TagReqDto(tagName)));
+        //memberTag 수정
+        memberTagService.changeMemberTags(findMember, tagListReqDto);
 
-        String memberId = request.getHeader("memberId");
-        Member findMember = memberService.findById(memberId);
-
-        List<String> tagNameList = dto.getTagList();
-        for (String name : tagNameList) {
-            Tag tag = tagService.findOneByName(name);
-            memberTagService.changeTags(findMember, tag);
-        }
-       return ResponseEntity.ok("success");
+       return new ResponseEntity<>(ApiUtils.success("관심 태그 변경 완료"), HttpStatus.OK);
     }
 
     @PostMapping("/pw") //비밀번호 재설정

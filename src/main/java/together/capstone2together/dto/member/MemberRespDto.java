@@ -1,11 +1,25 @@
 package together.capstone2together.dto.member;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.util.CustomDateUtil;
 
 public class MemberRespDto {
+
+    @Data
+    @Builder
+    public static class MyInfoRespDto{
+        private int point;
+        private String name;
+        private int createdRoomCnt;
+        private int applyRoomCnt;
+
+        public MyInfoRespDto() {
+
+        }
+    }
 
     @Data
     public static class ChangeKakaotalkIdRespDto{
@@ -36,4 +50,5 @@ public class MemberRespDto {
             this.name = member.getName();
         }
     }
+
 }

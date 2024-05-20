@@ -32,8 +32,7 @@ public class TagService {
 
     private boolean validateDuplicatedTag(TagReqDto tagReqDto) {
         Optional<Tag> tagOp = tagRepository.findByName(tagReqDto.getName());
-        if(tagOp.isPresent()) return true;
-        else return false;
+        return tagOp.isPresent();
     }
 
     public Tag findOneByName(String name){
