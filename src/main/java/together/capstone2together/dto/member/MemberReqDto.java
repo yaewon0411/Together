@@ -12,6 +12,17 @@ import java.util.List;
 public class MemberReqDto {
 
     @Data
+    public static class LoginReqDto{
+        @NotEmpty
+        @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "영문/숫자 2~20자 이내로 작성해주세요")
+        private String username;
+
+        @NotEmpty
+        @Size(min = 4, max = 20) //string 타입 길이 검증
+        private String password;
+    }
+
+    @Data
     public static class ChangePwReqDto{
         private String password;
 
@@ -25,16 +36,6 @@ public class MemberReqDto {
         private String kakaotalkId;
     }
 
-    @Data
-    public static class LoginReqDto{
-        @NotEmpty
-        @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "영문/숫자 2~20자 이내로 작성해주세요")
-        private String id;
-
-        @NotEmpty
-        @Size(min = 4, max = 20) //string 타입 길이 검증
-        private String password;
-    }
     @Data
     public static class JoinReqDto{
         @NotEmpty

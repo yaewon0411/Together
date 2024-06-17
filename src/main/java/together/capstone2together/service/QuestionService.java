@@ -3,20 +3,25 @@ package together.capstone2together.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import jakarta.persistence.NoResultException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.Question;
 import together.capstone2together.domain.Survey;
+import together.capstone2together.dto.question.QuestionRespDto;
+import together.capstone2together.dto.room.RoomReqDto;
 import together.capstone2together.repository.QuestionRepository;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static together.capstone2together.dto.question.QuestionRespDto.*;
+import static together.capstone2together.dto.room.RoomReqDto.*;
+import static together.capstone2together.dto.room.RoomReqDto.MakeRoomReqDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,26 +42,27 @@ public class QuestionService {
     }
     */
     @Transactional
-    public List<Question> makeQuestion(JsonNode jsonNode) throws JsonProcessingException {
-        List<Question> questionList = new LinkedList<>();
-        for (JsonNode node : jsonNode) {
-            Question question = Question.create(node.textValue());
-            questionRepository.save(question);
-            questionList.add(question);
-        }
-        return questionList;
+    public List<Question> makeQuestion(MakeRoomReqDto makeRoomReqDto) throws JsonProcessingException {
+
+        return makeRoomReqDto.getQuestionDtoList().stream()
+                .map(q -> questionRepository.save(Question.create(q.getAsking())))
+                .filter(Optional::isPresent)
+                .map(q -> q.get())
+                .collect(Collectors.toList());
+
     }
 
-    public JSONObject findQuestions(Survey survey){
+    public QuestionMapDto findQuestions(Survey survey){
         List<Question> questions = questionRepository.findBySurvey(survey);
-        JSONObject object = new JSONObject();
+        Map<Integer, String> questionsMap = new LinkedHashMap<>();
         int num = 1;
         for (Question question : questions) {
-            object.put(String.valueOf(num),question);
-            num++;
+            questionsMap.put(num++,question.getAsking());
         }
-        return object;
+        return new QuestionMapDto(questionsMap);
     }
+
+
 
     @Transactional
     public void deleteQuestion(Question question) {

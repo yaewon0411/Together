@@ -1,12 +1,13 @@
-package together.capstone2together.repository;
+package together.capstone2together.domain.itemTag;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import together.capstone2together.domain.item.Item;
-import together.capstone2together.domain.ItemTag;
+import together.capstone2together.domain.itemTag.ItemTag;
 import together.capstone2together.domain.Tag;
-import together.capstone2together.dto.ItemIdDto;
+import together.capstone2together.dto.item.ItemIdDto;
+import together.capstone2together.ex.CustomApiException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ public class ItemTagRepository {
     private final EntityManager em;
 
     public void save(ItemTag itemTag){
+        validateDuplicatedItemTag(itemTag);
         em.persist(itemTag);
     }
     private void validateDuplicatedItemTag(ItemTag itemTag) {
@@ -27,7 +29,7 @@ public class ItemTagRepository {
                 .setParameter("item", itemTag.getItem())
                 .setParameter("tag", itemTag.getTag())
                 .getResultList();
-        if(findList.size()>0) throw new IllegalStateException("중복 레코드");
+        if(!findList.isEmpty()) throw new CustomApiException("이미 저장된 ItemTag 입니다");
     }
     //사용자 관심 태그로 아이템 조회 -> 20개 출력
     /*
@@ -35,7 +37,7 @@ public class ItemTagRepository {
     태그 개수 5개면 각 태그당 4개씩 내보내는 식으로
      */
     public Set<Item> findItemListByTag(List<Tag> tagList){
-        if(tagList.size()==0) throw new IllegalStateException("설정한 관심 태그가 없습니다.");
+        if(tagList.isEmpty()) throw new CustomApiException("설정한 관심 태그가 없습니다.");
         int limit = 20;
         int size = tagList.size(); //6
         int perSize = limit/size; //3
@@ -67,11 +69,11 @@ public class ItemTagRepository {
                             .setParameter("tag", tag)
                             .getResultList())
                     .flatMap(List::stream)
-                    .collect(Collectors.toList());
+                    .toList();
 
-            List<ItemTag> addList = em.createQuery("SELECT it FROM ItemTag it WHERE it NOT IN :itemTagList ORDER BY FUNCTION('RAND') LIMIT :count", ItemTag.class)
-                    .setParameter("count", offset)
-                    .setParameter("itemTagList",itemTagList)
+            List<ItemTag> addList = em.createQuery("SELECT it FROM ItemTag it WHERE it.id NOT IN :itemTagList", ItemTag.class)
+                    .setParameter("itemTagList", itemTagList.stream().map(ItemTag::getId).collect(Collectors.toList()))
+                    .setMaxResults(offset)
                     .getResultList();
             for (ItemTag itemTag : addList) {
                 resultSet.add(itemTag.getItem());
@@ -81,7 +83,7 @@ public class ItemTagRepository {
         return resultSet;
     }
     public List<ItemTag> findByTagList(List<Tag> tagList){
-        if(tagList.size()==0) throw new IllegalStateException("설정한 관심 태그가 없습니다.");
+        if(tagList.isEmpty()) throw new CustomApiException("설정한 관심 태그가 없습니다.");
         List<ItemTag> result = new ArrayList<>();
         int limit = 20;
         int size = tagList.size(); //6
@@ -107,8 +109,8 @@ public class ItemTagRepository {
             List<ItemTag> addList = em.createQuery("SELECT it FROM ItemTag it WHERE it NOT IN :result ORDER BY FUNCTION('RAND') LIMIT :count", ItemTag.class)
                     .setParameter("count", offset)
                     .setParameter("result",result)
-                    //.setFirstResult(0)
-                    //.setMaxResults(offset)
+                    .setFirstResult(0)
+                    .setMaxResults(offset)
                     .getResultList();
 
             result.addAll(addList);
@@ -128,7 +130,7 @@ public class ItemTagRepository {
                 .getResultList();
     }
     public List<ItemIdDto> findItemByItemTag(ItemTag itemTag){
-        return em.createQuery("select new together.capstone2together.dto.ItemIdDto(i.id) from ItemTag it left join it.item i where i = :item", ItemIdDto.class)
+        return em.createQuery("select new together.capstone2together.dto.item.ItemIdDto(i.id) from ItemTag it left join it.item i where i = :item", ItemIdDto.class)
                 .setParameter("item",itemTag.getItem())
                 .getResultList();
     }

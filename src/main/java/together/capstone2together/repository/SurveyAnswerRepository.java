@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.Survey;
 import together.capstone2together.domain.SurveyAnswer;
-import together.capstone2together.dto.RoomDto;
+import together.capstone2together.dto.room.RoomReqDto.RoomDto;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface SurveyAnswerRepository extends JpaRepository<SurveyAnswer,Long>
 
     List<SurveyAnswer> findBySurvey(Survey survey);
 
-    @Query("select new together.capstone2together.dto.RoomDto(r.title, r.content, sa.status, r.member.name, r.survey.localDateTime, r.city, r.id) " +
+    @Query("select new together.capstone2together.dto.room.RoomReqDto.RoomDto(r.title, r.content, sa.status, r.member.name, r.survey.localDateTime, r.city, r.id) " +
             "from SurveyAnswer sa " +
             "join sa.room r " +
             "where sa.member = :member")

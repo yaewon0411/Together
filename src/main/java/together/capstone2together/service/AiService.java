@@ -3,16 +3,16 @@ package together.capstone2together.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.AI;
+import together.capstone2together.domain.ai.AI;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.member.Member;
-import together.capstone2together.repository.AiRepository;
+import together.capstone2together.domain.ai.AiRepository;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class AiService {
     private final AiRepository aiRepository;
 

@@ -3,16 +3,14 @@ package together.capstone2together.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.ItemTag;
 import together.capstone2together.domain.Tag;
-import together.capstone2together.dto.SearchDto;
 import together.capstone2together.dto.tag.TagReqDto;
-import together.capstone2together.dto.tag.TagRespDto;
 import together.capstone2together.repository.TagRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static together.capstone2together.dto.item.ItemReqDto.*;
 
 @Service
 @RequiredArgsConstructor

@@ -9,8 +9,10 @@ import together.capstone2together.domain.*;
 import together.capstone2together.domain.room.Room;
 import together.capstone2together.dto.ShowAllDto;
 import together.capstone2together.domain.member.Member;
+import together.capstone2together.ex.CustomApiException;
 import together.capstone2together.repository.RoomMemberRepository;
 import together.capstone2together.domain.room.RoomRepository;
+import together.capstone2together.util.CustomDateUtil;
 
 import java.util.List;
 
@@ -20,7 +22,6 @@ import java.util.List;
 public class RoomMemberService {
     private final RoomMemberRepository roomMemberRepository;
     private final RoomRepository roomRepository;
-    private final SubService subService;
 
     //설문 답변 pass한 회원 방에 조인시키기
     @Transactional
@@ -47,7 +48,7 @@ public class RoomMemberService {
         array.add(object);
 
         JSONObject addObject = new JSONObject();
-        addObject.put("Dday",subService.makeDday(room.getItem().getDeadline()));
+        addObject.put("Dday", CustomDateUtil.makeDday(room.getItem().getDeadline()));
         addObject.put("title",room.getItem().getTitle());
         array.add(addObject);
 
@@ -61,9 +62,13 @@ public class RoomMemberService {
         }
         return array;
     }
-    public boolean trueJoinedMember(Member member, Room room){
-        List<RoomMember> findList = roomMemberRepository.findByMemberAndRoom(member, room);
-        if(findList.size()>0) return true;
-        else return false;
+    public Room trueJoinedMember(Member member, Long roomId){
+        Room roomPS = roomRepository.findById(roomId).orElseThrow(
+                () -> new CustomApiException("존재하지 않는 방입니다")
+        );
+
+        List<RoomMember> findList = roomMemberRepository.findByMemberAndRoom(member, roomPS);
+        if(findList.isEmpty()) throw new CustomApiException("해당 방에 Fail 판정을 받았습니다");
+        return roomPS;
     }
 }

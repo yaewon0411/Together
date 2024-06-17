@@ -10,6 +10,7 @@ import together.capstone2together.domain.room.Room;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
@@ -17,7 +18,10 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     List <Room> findByMember(Member member); //팀장 탭 방 리스트 보기
     @Query("select r from Room r where r.item = :item")
-    List<Room> findByItem(@Param("item")Item item);
+    List<Room> findRoomsByItem(@Param("item")Item item);
+
+    Optional<Room> findByItem(Item item);
+
 
     @Query("select r from Room r where r.item = :item and r.member = :member")
     List<Room> findByMemberAndItem(@Param("item")Item item, @Param("member")Member member);

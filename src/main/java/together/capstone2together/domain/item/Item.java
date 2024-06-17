@@ -1,13 +1,10 @@
 package together.capstone2together.domain.item;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import together.capstone2together.domain.ItemTag;
+import together.capstone2together.domain.itemTag.ItemTag;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +47,14 @@ public class Item implements Serializable { //크롤링 결과 저장
         } else {
             available = "Y"; // 아직 마감 기한이 남았다면 'Y'으로 표기
         }
+    }
+
+    @Builder
+    public Item(String title, String content, String sponsor, String img) { //TODO 테스트 용으로 일단 만든 생성자
+        this.title = title;
+        this.content = content;
+        this.sponsor = sponsor;
+        this.img = img;
     }
 
     public static Item create(String title, String content, String sponsor, String deadline, String homepage, String img){

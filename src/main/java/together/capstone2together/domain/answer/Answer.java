@@ -1,11 +1,12 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.answer;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.checkerframework.checker.units.qual.A;
+import together.capstone2together.domain.Question;
+import together.capstone2together.domain.SurveyAnswer;
 
 @Entity
 @Getter @Setter

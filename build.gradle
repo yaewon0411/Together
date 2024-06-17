@@ -48,32 +48,8 @@ dependencies {
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
 	implementation 'org.mariadb.jdbc:mariadb-java-client'
-
-
-
-	//오라클 클라우드 접속 라이브러리
-	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
-	implementation 'com.oracle.database.security:osdt_cert'
-	implementation 'com.oracle.database.security:oraclepki'
-	implementation 'com.oracle.database.security:osdt_core'
-
-	//oci 최근은 3.25.1로 해봄 -> 3.1.0으로 수정할것
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-workrequests', version: '3.1.0' //2.8.1
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-filestorage', version: '3.1.0'
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-audit', version: '3.1.0'
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-core', version: '3.1.0'
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-database', version: '3.1.0'
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '3.1.0'
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-objectstorage-generated', version: '3.1.0'
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common-httpclient-jersey3', version: '3.1.0' //3.25.1
-	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-objectstorage-extensions', version: '3.1.0'//1.8.0
-
-
-	//==============stack overflow 참고=====================
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-addons-resteasy-client-configurator:3.1.0'
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:3.1.0'
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey:3.1.0'
-
+	implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.2' //jwt
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.21.3'
 
 	//======================================================
 

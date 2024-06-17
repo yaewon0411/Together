@@ -1,4 +1,4 @@
-package together.capstone2together.domain.member;
+package together.capstone2together.service;
 
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.engine.IThrottledTemplateWriterControl;
+import together.capstone2together.domain.member.Member;
+import together.capstone2together.domain.member.MemberRepository;
 import together.capstone2together.ex.CustomApiException;
 import together.capstone2together.util.ApiUtils;
 

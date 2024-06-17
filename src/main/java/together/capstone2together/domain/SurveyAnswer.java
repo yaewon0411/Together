@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import together.capstone2together.domain.answer.Answer;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.room.Room;
 
@@ -56,4 +57,5 @@ public class SurveyAnswer {
         surveyAnswer.setLocalDateTime(LocalDateTime.now());
         return surveyAnswer;
     }
+
 }

@@ -10,6 +10,18 @@ import java.util.List;
 @Data
 public class ItemReqDto {
 
+    @Data
+    public static class SearchDto {
+        private String title;
+        private Long id;
+    }
+
+    @Data
+    public static class ItemPickReqDto{
+        private Long itemId;
+        private String status; //pick Status (true or false)
+    }
+
     @NotEmpty
     private String title;
 

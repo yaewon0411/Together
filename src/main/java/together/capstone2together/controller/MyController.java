@@ -7,9 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.domain.*;
 import together.capstone2together.domain.member.Member;
-import together.capstone2together.domain.member.MemberService;
-import together.capstone2together.domain.memberTag.MemberTagService;
-import together.capstone2together.dto.TagListReqDto;
+import together.capstone2together.service.MemberService;
+import together.capstone2together.service.MemberTagService;
 import together.capstone2together.dto.member.MemberRespDto;
 import together.capstone2together.dto.member.MemberRespDto.ChangeKakaotalkIdRespDto;
 import together.capstone2together.dto.tag.TagReqDto;
@@ -20,6 +19,7 @@ import together.capstone2together.util.CustomDataUtil;
 import java.util.List;
 
 import static together.capstone2together.dto.member.MemberReqDto.*;
+import static together.capstone2together.dto.tag.TagReqDto.*;
 
 @RestController
 @RequiredArgsConstructor

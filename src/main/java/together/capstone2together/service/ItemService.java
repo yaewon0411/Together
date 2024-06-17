@@ -1,30 +1,30 @@
 package together.capstone2together.service;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.room.Room;
-import together.capstone2together.domain.room.RoomService;
-import together.capstone2together.dto.SearchDto;
+import together.capstone2together.domain.room.RoomRepository;
 import together.capstone2together.domain.item.ItemRepository;
+import together.capstone2together.dto.item.ItemReqDto;
 import together.capstone2together.ex.CustomApiException;
-import together.capstone2together.util.CustomDataUtil;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static together.capstone2together.dto.item.ItemReqDto.*;
+import static together.capstone2together.dto.item.ItemRespDto.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ItemService {
     private final ItemRepository itemRepository;
-    private final SubService subService;
-    private final RoomService roomService;
+    private final RoomRepository roomRepository;
 
     @Transactional
     public Item save(Item item){
@@ -38,56 +38,60 @@ public class ItemService {
     }
 
     //실시간 인기 활동
-    public JSONArray getTop20Views(){
+    public List<Top20ViewsRespDto> getTop20Views(){
         List<Item> findList = itemRepository.findTop20ByViews(getCurrentTime());
-
-        JSONArray array = new JSONArray();
-        for (Item item : findList) {
-            Room findRoom = roomService.findById(item.getId());
-            int size;
-            if(findRoom == null) size = 0;
-            else size = findRoom.getRoomMemberList().size();
-            JSONObject object = new JSONObject();
-            array.add(CustomDataUtil.makeObject(item, object, size));
-        }
-        return array;
+        List<Top20ViewsRespDto> response = new ArrayList<>();
+        findList.stream().forEach(
+                item -> {
+                    Optional<Room> roomOP = roomRepository.findByItem(item);
+                    roomOP.ifPresent(room -> response.add(new Top20ViewsRespDto(room, item)));
+                }
+        );
+        return response;
     }
+
     public Item findById(Long id){
         return itemRepository.findById(id).get();
     }
 
-    public JSONObject showItemInfo(Long id){
-        Item findOne = itemRepository.findById(id).get();
-        return subService.makeItemJson(findOne);
+    public ItemInfoRespDto showItemInfo(Long id){
+        //아이템 찾기
+        Item itemPS = itemRepository.findById(id).orElseThrow(
+                () -> new CustomApiException("해당 대외활동은 존재하지 않습니다")
+        );
+
+        ItemInfoRespDto itemInfoRespDto = new ItemInfoRespDto(itemPS);
+
+        return itemInfoRespDto;
     }
 
+
+
     //마감 직전 활동
-    public JSONArray getImminentDeadline(){
+    public List<ImminentDeadlineRespDto> getImminentDeadline(){
         List<Item> findList = itemRepository.findTop20ByDeadlineAfterOrderByDeadlineAsc(getCurrentTime());
-        JSONArray array = new JSONArray();
-        for (Item item : findList) {
-            Room findRoom = roomService.findById(item.getId());
-            int size;
-            if(findRoom == null) size = 0;
-            else size = findRoom.getRoomMemberList().size();
-            JSONObject object = new JSONObject();
-            array.add(CustomDataUtil.makeObject(item, object, size));
-        }
-        return array;
+        List<ImminentDeadlineRespDto> response = new ArrayList<>();
+        findList.stream().forEach(
+                item -> {
+                    Optional<Room> roomOP = roomRepository.findByItem(item);
+                    roomOP.ifPresent(room -> response.add(new ImminentDeadlineRespDto(room, item)));
+                }
+        );
+        return response;
     }
+
+
     //최근 추가된 활동
-    public JSONArray getRecentlyAddedItem(){
+    public List<RecentlyAddRespDto> getRecentlyAddedItem(){
         List<Item> findList = itemRepository.findTop20ByOrderByIdDesc(getCurrentTime());
-        JSONArray array = new JSONArray();
-        for (Item item : findList) {
-            Room findRoom = roomService.findById(item.getId());
-            int size;
-            if(findRoom == null) size = 0;
-            else size = findRoom.getRoomMemberList().size();
-            JSONObject object = new JSONObject();
-            array.add(CustomDataUtil.makeObject(item, object, size));
-        }
-        return array;
+        List<RecentlyAddRespDto> response = new ArrayList<>();
+        findList.stream().forEach(
+                item -> {
+                    Optional<Room> roomOP = roomRepository.findByItem(item);
+                    roomOP.ifPresent(room -> response.add(new RecentlyAddRespDto(room, item)));
+                }
+        );
+        return response;
     }
     private static String getCurrentTime() {
         LocalDateTime currentTime = LocalDateTime.now();

@@ -1,23 +1,24 @@
 package together.capstone2together.service;
 
-
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.*;
 import together.capstone2together.domain.item.Item;
+import together.capstone2together.domain.itemTag.ItemTag;
 import together.capstone2together.domain.memberTag.MemberTag;
 import together.capstone2together.domain.room.Room;
-import together.capstone2together.domain.room.RoomService;
-import together.capstone2together.dto.SearchDto;
-import together.capstone2together.repository.ItemTagRepository;
-import together.capstone2together.util.CustomDataUtil;
+import together.capstone2together.domain.room.RoomRepository;
+import together.capstone2together.domain.itemTag.ItemTagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static together.capstone2together.dto.item.ItemReqDto.*;
+import static together.capstone2together.dto.item.ItemRespDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,47 +26,31 @@ import java.util.Set;
 public class ItemTagService {
 
     private final ItemTagRepository itemTagRepository;
-    private final SubService subService;
-    private final ItemService itemService;
 
-    private final RoomService roomService;
+    private final RoomRepository roomRepository;
     @Transactional
     public void save(ItemTag itemTag){
         itemTagRepository.save(itemTag);
     }
-    public JSONArray findItemByInterestedTag(List<MemberTag> memberTagList){
+    public List<ItemByInterestRespDto> findItemByInterestedTag(List<MemberTag> memberTagList){
 
         //멤버-태그에서 태그 번호 추출
-        List<Tag> tagList = new ArrayList<>();
-        for (MemberTag memberTag : memberTagList) {
-            tagList.add(memberTag.getTag());
-        }
+        List<Tag> tagList = memberTagList.stream().map(MemberTag::getTag).collect(Collectors.toList());
+
+
         //멤버-태그 기반으로 아이템-태그 리스트 추출
         //List<ItemTag> findList = itemTagRepository.findByTagList(taglist);
         Set<Item> findSet = itemTagRepository.findItemListByTag(tagList);
-        List<Item> findList = new ArrayList<>(findSet);
-        JSONArray array = new JSONArray();
-        for (Item item : findList) {
-            List<Room> roomList = roomService.getRoomListByItem(item);
-            int size = roomList.size();
-            JSONObject object = new JSONObject();
-            array.add(CustomDataUtil.makeObject(item, object, size));
-
-        }
-        return array;
+        List<ItemByInterestRespDto> response = new ArrayList<>();
+        findSet.stream().forEach(
+                item ->{
+                    Optional<Room> roomOP = roomRepository.findByItem(item);
+                    roomOP.ifPresent(room -> response.add(new ItemByInterestRespDto(room, item)));
+                }
+        );
+        return response;
     }
 
-    private Object makeObject(ItemTag itemTag, JSONObject object) {
-        Item findOne = itemTag.getItem();
-        object.put("title", findOne.getTitle());
-        object.put("itemId",findOne.getId());
-        object.put("sponsor",findOne.getSponsor());
-        object.put("views",findOne.getViews());
-        object.put("img",findOne.getImg());
-        object.put("Dday",subService.makeDday(findOne.getDeadline()));
-
-        return object;
-    }
     public List<ItemTag> findByTagList(List<Tag>tagList){
         return itemTagRepository.findByTagList(tagList);
     }

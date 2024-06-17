@@ -1,9 +1,10 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.interest;
 
 import jakarta.persistence.*;
 import lombok.*;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.member.Member;
+import together.capstone2together.ex.CustomApiException;
 
 @Entity
 @Getter @Setter
@@ -19,6 +20,11 @@ public class Interest { //ai 추천 대외활동에 대한 관심도(1-5) 저장
     @JoinColumn(name="item_id")
     private Item item;
     private int score; //4~5점 인 거는 내가 관심 있는 거
+
+    public void changeScore(int score){
+        if(score<=0) throw new CustomApiException("0점 이하를 줄 수 없습니다");
+        this.score = score;
+    }
 
     public static Interest create(Member member, Item item, int score){
         Interest interest = new Interest();

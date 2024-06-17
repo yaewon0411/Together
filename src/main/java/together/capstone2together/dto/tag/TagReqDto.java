@@ -8,6 +8,12 @@ import java.util.List;
 @Data
 public class TagReqDto {
 
+    @Data
+    public static class TagListReqDto {
+        private List<String> tagList;
+    }
+
+
     private String name;
     public TagReqDto(String name){
         this.name = name;

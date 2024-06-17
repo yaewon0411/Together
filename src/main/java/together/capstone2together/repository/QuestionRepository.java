@@ -6,11 +6,12 @@ import together.capstone2together.domain.Question;
 import together.capstone2together.domain.Survey;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    public Question save(Question question);
+    Optional<Question> save(Question question);
 
     List<Question> findBySurvey(Survey survey);
 }

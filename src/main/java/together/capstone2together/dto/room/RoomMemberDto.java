@@ -1,4 +1,4 @@
-package together.capstone2together.dto;
+package together.capstone2together.dto.room;
 
 import lombok.Data;
 

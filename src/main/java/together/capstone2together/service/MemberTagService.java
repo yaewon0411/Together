@@ -1,11 +1,13 @@
-package together.capstone2together.domain.memberTag;
+package together.capstone2together.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.Tag;
-import together.capstone2together.dto.TagListReqDto;
+import together.capstone2together.domain.memberTag.MemberTag;
+import together.capstone2together.domain.memberTag.MemberTagRepository;
+import together.capstone2together.dto.tag.TagReqDto;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static together.capstone2together.dto.memberTag.MemberTagReqDto.*;
+import static together.capstone2together.dto.tag.TagReqDto.*;
 
 @Service
 @RequiredArgsConstructor

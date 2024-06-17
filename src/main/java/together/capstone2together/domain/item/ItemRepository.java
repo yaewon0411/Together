@@ -17,7 +17,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findTop20ByDeadlineAfterOrderByDeadlineAsc(String currentTime);
 
-    List<Item> findByTitle(@Param("title")String title);
 
     @Query("select i from Item i where i.deadline >= :currentTime order by i.id desc")
     List<Item> findTop20ByOrderByIdDesc(@Param("currentTime")String currentTime);
