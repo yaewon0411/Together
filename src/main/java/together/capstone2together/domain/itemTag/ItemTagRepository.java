@@ -21,16 +21,9 @@ public class ItemTagRepository {
     private final EntityManager em;
 
     public void save(ItemTag itemTag){
-        validateDuplicatedItemTag(itemTag);
         em.persist(itemTag);
     }
-    private void validateDuplicatedItemTag(ItemTag itemTag) {
-        List <ItemTag> findList = em.createQuery("select it from ItemTag it where it.item = :item and it.tag = :tag", ItemTag.class)
-                .setParameter("item", itemTag.getItem())
-                .setParameter("tag", itemTag.getTag())
-                .getResultList();
-        if(!findList.isEmpty()) throw new CustomApiException("이미 저장된 ItemTag 입니다");
-    }
+
     //사용자 관심 태그로 아이템 조회 -> 20개 출력
     /*
     태그 개수에 따라서 내보낼 아이템 결정해야 함

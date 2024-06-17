@@ -3,6 +3,7 @@ package together.capstone2together.dto.item;
 import jakarta.validation.constraints.NotEmpty;
 import jdk.jfr.DataAmount;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import together.capstone2together.domain.item.Item;
 
 import java.util.List;
@@ -11,9 +12,14 @@ import java.util.List;
 public class ItemReqDto {
 
     @Data
+    @NoArgsConstructor
     public static class SearchDto {
         private String title;
         private Long id;
+        public SearchDto(Item item){
+            title = item.getTitle();
+            id = item.getId();
+        }
     }
 
     @Data
