@@ -1,6 +1,13 @@
 # Together 
+대외 활동 추천 및 팀원을 모집하는 서비스<br>
+<img width="647" alt="image" src="https://github.com/yaewon0411/Together/assets/44336444/85ed39f8-3d83-4bc8-9a11-0697e50e6142">
 
 
+
+
+
+
+## 기록
 ### 전역 예외 처리기: CustomExceptionHandler
 - @RestControllerAdvice : 여러 컨트롤러에서 발생 가능한 예외를 전역적으로 처리할 수 있는 핸들러를 포함함을 나타내는 어노테이션
 - 예외 처리 자동화 : 특정 예외 유형을 자동으로 캐치하고 적절한 HTTP 응답 반환
