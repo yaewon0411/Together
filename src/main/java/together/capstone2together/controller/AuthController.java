@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import together.capstone2together.domain.member.Member;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.tag.Tag;
 import together.capstone2together.dto.memberTag.MemberTagReqDto;
 import together.capstone2together.dto.tag.TagReqDto;
 import together.capstone2together.service.MemberService;

@@ -1,27 +1,19 @@
 package together.capstone2together.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.NoResultException;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.Question;
-import together.capstone2together.domain.Survey;
-import together.capstone2together.dto.question.QuestionRespDto;
-import together.capstone2together.dto.room.RoomReqDto;
-import together.capstone2together.repository.QuestionRepository;
+import together.capstone2together.domain.question.Question;
+import together.capstone2together.domain.survey.Survey;
+import together.capstone2together.domain.question.QuestionRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static together.capstone2together.dto.question.QuestionRespDto.*;
 import static together.capstone2together.dto.room.RoomReqDto.*;
-import static together.capstone2together.dto.room.RoomReqDto.MakeRoomReqDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,11 +38,10 @@ public class QuestionService {
 
         return makeRoomReqDto.getQuestionDtoList().stream()
                 .map(q -> questionRepository.save(Question.create(q.getAsking())))
-                .filter(Optional::isPresent)
-                .map(q -> q.get())
                 .collect(Collectors.toList());
 
     }
+
 
     public QuestionMapDto findQuestions(Survey survey){
         List<Question> questions = questionRepository.findBySurvey(survey);

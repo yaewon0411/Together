@@ -1,22 +1,18 @@
 package together.capstone2together.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.*;
-import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.itemTag.ItemTag;
 import together.capstone2together.domain.itemTag.ItemTagRepositoryI;
 import together.capstone2together.domain.memberTag.MemberTag;
 import together.capstone2together.domain.room.Room;
 import together.capstone2together.domain.room.RoomRepository;
-import together.capstone2together.domain.itemTag.ItemTagRepository;
+import together.capstone2together.domain.tag.Tag;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static together.capstone2together.dto.item.ItemReqDto.*;
 import static together.capstone2together.dto.item.ItemRespDto.*;
@@ -75,36 +71,4 @@ public class ItemTagService {
         return searchList;
     }
 
-//    public List<SearchDto> searchItems(String keyword) {
-//        List<SearchDto> result = new ArrayList<>();
-//        List<ItemTag> findList = itemTagRepository.find(keyword);
-//        for (ItemTag itemTag : findList) {
-//            SearchDto dto = new SearchDto();
-//            dto.setId(itemTag.getItem().getId());
-//            dto.setTitle(itemTag.getItem().getTitle());
-//            result.add(dto);
-//        }
-//        return result;
-//    }
-//
-//    public List<SearchDto> searchItems(String keyword) {
-//
-//
-//        Tag tag = Tag.findByKeyword(keyword);
-//        if(tag2 ==null){
-//            tag2 = Tag2.containedKeyword(keyword);
-//        }
-//        System.out.println("tag = " + tag2);
-//        List<ItemTag> findList = itemTagRepository.findByTag(tag2);
-//        //아이디랑 제목만 내보내면됨
-//        List<SearchDto> searchList = new ArrayList<>();
-//        for (ItemTag itemTag : findList) {
-//            SearchDto dto = new SearchDto();
-//            dto.setId(itemTag.getItem().getId());
-//            dto.setTitle(itemTag.getItem().getTitle());
-//            dto.setTag2List(itemTag.getItem().getTag2List());
-//            searchList.add(dto);
-//        }
-//        return searchList;
-//    }
 }

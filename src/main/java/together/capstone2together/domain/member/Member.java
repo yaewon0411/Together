@@ -5,9 +5,9 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import together.capstone2together.domain.Pick;
+import together.capstone2together.domain.pick.Pick;
 import together.capstone2together.domain.room.Room;
-import together.capstone2together.domain.RoomMember;
+import together.capstone2together.domain.roomMember.RoomMember;
 
 import java.io.Serializable;
 

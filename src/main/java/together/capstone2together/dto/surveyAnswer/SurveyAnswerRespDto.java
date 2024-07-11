@@ -3,11 +3,11 @@ package together.capstone2together.dto.surveyAnswer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import together.capstone2together.domain.answer.Answer;
-import together.capstone2together.domain.RoomMember;
+import together.capstone2together.domain.roomMember.RoomMember;
 import together.capstone2together.domain.Status;
-import together.capstone2together.domain.SurveyAnswer;
+import together.capstone2together.domain.surveyAnswer.SurveyAnswer;
 import together.capstone2together.domain.room.Room;
-import together.capstone2together.dto.room.RoomReqDto;
+import together.capstone2together.dto.room.RoomDto;
 import together.capstone2together.util.CustomDateUtil;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class SurveyAnswerRespDto {
         private String status;
         private Long roomId;
 
-        public JoinedMemberRespDto(RoomReqDto.RoomDto roomDto) {
+        public JoinedMemberRespDto(RoomDto roomDto) {
             this.title = roomDto.getTitle();
             this.content = roomDto.getContent();
             this.creator = roomDto.getCreator();

@@ -1,13 +1,15 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.surveyAnswer;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import together.capstone2together.domain.Status;
 import together.capstone2together.domain.answer.Answer;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.room.Room;
+import together.capstone2together.domain.survey.Survey;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;

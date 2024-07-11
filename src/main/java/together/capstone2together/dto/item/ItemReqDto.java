@@ -47,13 +47,6 @@ public class ItemReqDto {
     private List<String> tagList;
 
     public Item toEntity(){
-        return Item.create(
-                this.title,
-                this.content,
-                this.sponsor,
-                this.deadline,
-                this.homepage,
-                this.img
-        );
+        return Item.create(this);
     }
 }

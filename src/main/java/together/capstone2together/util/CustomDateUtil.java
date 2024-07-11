@@ -107,4 +107,10 @@ public class CustomDateUtil {
             return (int) hours + "시간 전";
         }
     }
+
+    public static String getCurrentTime() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return currentTime.format(formatter);
+    }
 }

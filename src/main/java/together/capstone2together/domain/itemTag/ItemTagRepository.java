@@ -4,8 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import together.capstone2together.domain.item.Item;
-import together.capstone2together.domain.itemTag.ItemTag;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.tag.Tag;
 import together.capstone2together.dto.item.ItemIdDto;
 import together.capstone2together.ex.CustomApiException;
 

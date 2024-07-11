@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import together.capstone2together.domain.RoomMember;
-import together.capstone2together.domain.Survey;
+import together.capstone2together.domain.roomMember.RoomMember;
+import together.capstone2together.domain.survey.Survey;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.member.Member;
 
@@ -44,16 +44,17 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
-    public static Room create (Item item, Member member, String title, String content, int capacity, String city, Survey survey) {
+
+    public Room (Item item, Member member, String title, String content, int capacity, String city, Survey survey) {
         Room room = new Room();
         room.item = item;
+        item.getRoomList().add(this);
         room.member = member;
         room.title = title;
         room.content = content;
         room.capacity = capacity;
         room.city = city;
         room.survey = survey;
-        return room;
     }
     public boolean isFull(){
         return roomMemberList.size()>this.capacity; // -> 방 생성자도 이미 들어와있으므로 등호 들어가게

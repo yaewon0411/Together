@@ -24,8 +24,6 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-	//implementation 'javax.xml.bind:jaxb-api'
-	//implementation 'jakarta.xml.bind:jaxb-runtime'
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -34,7 +32,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
@@ -49,7 +46,7 @@ dependencies {
 
 	implementation 'org.mariadb.jdbc:mariadb-java-client'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.2' //jwt
-	implementation 'com.nimbusds:nimbus-jose-jwt:9.21.3'
+	runtimeOnly 'mysql:mysql-connector-java'
 
 	//======================================================
 

@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import together.capstone2together.domain.Question;
-import together.capstone2together.domain.SurveyAnswer;
+import together.capstone2together.domain.question.Question;
+import together.capstone2together.domain.surveyAnswer.SurveyAnswer;
 
 @Entity
 @Getter @Setter

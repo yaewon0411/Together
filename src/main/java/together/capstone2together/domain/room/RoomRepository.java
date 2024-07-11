@@ -23,7 +23,11 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<Room> findByItem(Item item);
 
 
-    @Query("select r from Room r where r.item = :item and r.member = :member")
-    List<Room> findByMemberAndItem(@Param("item")Item item, @Param("member")Member member);
+//    @Query("select r from Room r where r.item = :item and r.member = :member")
+//    List<Room> findByMemberAndItem(@Param("item")Item item, @Param("member")Member member);
 
+    Optional<Room> findByMemberAndItem(@Param("item")Item item, @Param("member")Member member);
+
+    @Query("SELECT r FROM Room r WHERE r.item.id IN :itemIds")
+    List<Room> findByItemIds(List<Long> itemIds);
 }

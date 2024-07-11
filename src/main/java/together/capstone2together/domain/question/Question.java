@@ -1,13 +1,11 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.question;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
+import together.capstone2together.domain.survey.Survey;
 
 @Entity
 @Getter @Setter

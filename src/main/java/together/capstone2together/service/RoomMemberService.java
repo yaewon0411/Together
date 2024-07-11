@@ -1,18 +1,15 @@
 package together.capstone2together.service;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.*;
 import together.capstone2together.domain.room.Room;
-import together.capstone2together.dto.ShowAllDto;
+import together.capstone2together.domain.roomMember.RoomMember;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.ex.CustomApiException;
-import together.capstone2together.repository.RoomMemberRepository;
+import together.capstone2together.domain.roomMember.RoomMemberRepository;
 import together.capstone2together.domain.room.RoomRepository;
-import together.capstone2together.util.CustomDateUtil;
 
 import java.util.List;
 
@@ -35,33 +32,7 @@ public class RoomMemberService {
         if(findList.size()>0) throw new IllegalStateException("이미 참여한 회원");
     }
     //팀 구성원 직책과 연락처 확인 화면
-    public JSONArray findAllMemberInRoom(Long id){
-        Room room = roomRepository.findById(id).get();
-        List<ShowAllDto> findList = roomMemberRepository.findAll(room);
 
-        JSONArray array = new JSONArray();
-        JSONObject object = new JSONObject();
-
-        object.put("role","팀장");
-        object.put("name",room.getMember().getName());
-        object.put("kakaotalkId",room.getMember().getKakaotalkId());
-        array.add(object);
-
-        JSONObject addObject = new JSONObject();
-        addObject.put("Dday", CustomDateUtil.makeDday(room.getItem().getDeadline()));
-        addObject.put("title",room.getItem().getTitle());
-        array.add(addObject);
-
-        //팀원 반복문 돌려서 넣기
-        for (ShowAllDto show : findList) {
-            JSONObject object2 = new JSONObject();
-            object2.put("role","팀원");
-            object2.put("name",show.getName());
-            object2.put("kakaotalkId",show.getKakaotalkId());
-            array.add(object2);
-        }
-        return array;
-    }
     public Room trueJoinedMember(Member member, Long roomId){
         Room roomPS = roomRepository.findById(roomId).orElseThrow(
                 () -> new CustomApiException("존재하지 않는 방입니다")

@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.member.Member;
-import together.capstone2together.domain.Pick;
+import together.capstone2together.domain.pick.Pick;
 import together.capstone2together.domain.room.Room;
 import together.capstone2together.ex.CustomApiException;
-import together.capstone2together.repository.PickRepository;
+import together.capstone2together.domain.pick.PickRepository;
 import together.capstone2together.util.CustomDataUtil;
 
 import java.util.List;
@@ -22,7 +22,6 @@ import static together.capstone2together.dto.pick.PickRespDto.*;
 @RequiredArgsConstructor
 public class PickService {
     private final PickRepository pickRepository;
-    private final SubService subService;
     private final RoomService roomService;
 
 

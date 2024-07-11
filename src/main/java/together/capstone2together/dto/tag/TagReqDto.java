@@ -1,7 +1,7 @@
 package together.capstone2together.dto.tag;
 
 import lombok.Data;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.tag.Tag;
 
 import java.util.List;
 

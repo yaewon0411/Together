@@ -116,14 +116,14 @@ public class ItemRespDto {
         private String img;
         private String dDay;
         private int joinedNumber;
-        public Top20ViewsRespDto (Room room, Item item){
-            this.title = room.getTitle();
+        public Top20ViewsRespDto (Item item){
+            this.title = item.getTitle();
             this.itemId = item.getId();
             this.sponsor = item.getSponsor();
             this.views = item.getViews();
             this.img = item.getImg();
             this.dDay = CustomDataUtil.makeDday(item.getDeadline());
-            this.joinedNumber = room.getRoomMemberList().size();
+            this.joinedNumber = item.getRoomList().size();
         }
     }
 

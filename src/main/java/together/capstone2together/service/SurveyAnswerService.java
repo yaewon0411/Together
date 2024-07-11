@@ -1,30 +1,31 @@
 package together.capstone2together.service;
 
-import jakarta.persistence.NoResultException;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import together.capstone2together.domain.*;
+import together.capstone2together.domain.answer.Answer;
+import together.capstone2together.domain.answer.AnswerRepository;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.member.MemberRepository;
+import together.capstone2together.domain.question.Question;
 import together.capstone2together.domain.room.Room;
-import together.capstone2together.dto.room.RoomReqDto;
-import together.capstone2together.dto.surveyAnswer.SurveyAnswerRespDto;
+import together.capstone2together.domain.roomMember.RoomMember;
+import together.capstone2together.domain.survey.Survey;
+import together.capstone2together.domain.surveyAnswer.SurveyAnswer;
+import together.capstone2together.dto.room.RoomDto;
 import together.capstone2together.ex.CustomApiException;
-import together.capstone2together.repository.RoomMemberRepository;
-import together.capstone2together.repository.SurveyAnswerRepository;
+import together.capstone2together.domain.question.QuestionRepository;
+import together.capstone2together.domain.roomMember.RoomMemberRepository;
+import together.capstone2together.domain.surveyAnswer.SurveyAnswerRepository;
 import together.capstone2together.util.CustomDateUtil;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static together.capstone2together.dto.room.RoomReqDto.*;
+import static together.capstone2together.dto.question.QuestionRespDto.*;
+import static together.capstone2together.dto.question.QuestionRespDto.QuestionAnswerListDto.*;
 import static together.capstone2together.dto.surveyAnswer.SurveyAnswerRespDto.*;
 import static together.capstone2together.dto.surveyAnswer.SurveyAnswerRespDto.AppliedMemberRespDto.*;
 
@@ -35,6 +36,8 @@ public class SurveyAnswerService {
     private final SurveyAnswerRepository surveyAnswerRepository;
     private final MemberRepository memberRepository;
     private final RoomMemberRepository roomMemberRepository;
+    private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
 
     @Transactional
     public void save (SurveyAnswer surveyAnswer){
@@ -87,6 +90,7 @@ public class SurveyAnswerService {
 
     //팀원 탭 - 지원한 방 리스트 보기
     public List<JoinedMemberRespDto> getJoinedRoomList(Member member){
+
         List<RoomDto> findList = surveyAnswerRepository.findRoomByJoinedMember(member);
         List<JoinedMemberRespDto> response = new ArrayList<>();
 
@@ -170,5 +174,23 @@ public class SurveyAnswerService {
             throw new CustomApiException("이미 Pass 판정을 내린 답변입니다");
 
         surveyAnswerPS.setStatus(Status.FAIL);
+    }
+
+    public void applyRoom(QuestionAnswerListDto questionAnswerListDto, Room room, Member member) {
+
+        List<Answer> answers = new ArrayList<>();
+        // answer 등록하고
+        List<QuestionAnswer> questionAnswerList = questionAnswerListDto.getQuestionAnswerList();
+        for (QuestionAnswer questionAnswer : questionAnswerList) {
+            Question questionPS = questionRepository.findById(questionAnswer.getQuestionId())
+                    .orElseThrow(
+                            () -> new CustomApiException("해당 질문은 존재하지 않습니다")
+                    );
+            Answer answerPS = answerRepository.save(Answer.create(questionPS, questionAnswer.getAnswer()));
+            answers.add(answerPS);
+        }
+
+        // surveyAnswer 등록하기
+        surveyAnswerRepository.save(SurveyAnswer.create(room, member, answers));
     }
 }

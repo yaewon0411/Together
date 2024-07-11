@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.itemTag.ItemTag;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.tag.Tag;
 import together.capstone2together.dto.item.ItemReqDto;
 import together.capstone2together.dto.item.ItemRespDto;
 import together.capstone2together.dto.tag.TagReqDto;
@@ -33,7 +33,7 @@ public class ItemController {
     public ResponseEntity<?> addItem(@RequestBody ItemReqDto itemReqDto){
 
         //아이템 저장
-        Item item = itemService.save(itemReqDto.toEntity());
+        Item item = itemService.save(itemReqDto);
 
         //태그  저장
         List<String> tagList = itemReqDto.getTagList();

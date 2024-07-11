@@ -1,8 +1,6 @@
 package together.capstone2together.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import together.capstone2together.config.auth.LoginMember;
-import together.capstone2together.domain.*;
-import together.capstone2together.domain.answer.Answer;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.memberTag.MemberTag;
+import together.capstone2together.domain.pick.Pick;
+import together.capstone2together.domain.question.Question;
 import together.capstone2together.service.MemberTagService;
 import together.capstone2together.domain.room.Room;
 import together.capstone2together.service.RoomService;
@@ -64,20 +62,19 @@ public class HomeController {
         return new ResponseEntity<>(ApiUtils.success(itemByInterestedTag),HttpStatus.OK);
     }
 
-    @GetMapping("/recently") //최근 추가된 활동
+    @GetMapping("/recent") //최근 추가된 활동
     public ResponseEntity<?> getRecentlyAddItem(@AuthenticationPrincipal LoginMember loginMember){
         List<RecentlyAddRespDto> recentlyAddedItem = itemService.getRecentlyAddedItem();
         return new ResponseEntity<>(ApiUtils.success(recentlyAddedItem),HttpStatus.OK);
     }
 
 
-    @GetMapping("/item") //홈 화면에서 특정 아이템 누르면 그 아이템의 상세 정보가 나오도록
-    public ResponseEntity<?> getItemInfo(HttpServletRequest request, @AuthenticationPrincipal LoginMember loginMember){
-        Long itemId = Long.valueOf(request.getHeader("itemId"));
+    @GetMapping("/items/{itemId}") //홈 화면에서 특정 아이템 누르면 그 아이템의 상세 정보가 나오도록
+    public ResponseEntity<?> getItemInfo(@PathVariable("itemId") Long itemId, @AuthenticationPrincipal LoginMember loginMember){
         ItemInfoRespDto itemInfoRespDto = itemService.showItemInfo(itemId);
         return new ResponseEntity<>(ApiUtils.success(itemInfoRespDto),HttpStatus.OK);
     }
-    @PostMapping("/item/pick") //아이템 pick 하기 (클라이언트측에서 서버로 pick 여부 전달)
+    @PostMapping("/items/pick") //아이템 pick 하기 (클라이언트측에서 서버로 pick 여부 전달)
     public ResponseEntity<?> itemPick(@RequestBody ItemPickReqDto itemPickReqDto, HttpServletRequest request, @AuthenticationPrincipal LoginMember loginMember){
         if(itemPickReqDto.getStatus().equals("true")) {//pick 값은 true 아니면 false (String)
             Member memberPS = memberService.findById(loginMember.getUsername());
@@ -87,12 +84,12 @@ public class HomeController {
        return new ResponseEntity<>(ApiUtils.success("대외활동 pick 완료"), HttpStatus.CREATED);
     }
 
-    @GetMapping("/item/room") //해당 아이템에 생성된 방들 불러오기
-    public ResponseEntity<?> getAllRoom(@AuthenticationPrincipal LoginMember loginMember, HttpServletRequest request){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
-        Item findOne = itemService.findById(Long.valueOf(request.getHeader("itemId")));
+    @GetMapping("/items/{itemId}/rooms") //해당 아이템에 생성된 방들 불러오기
+    public ResponseEntity<?> getAllRoom(@PathVariable("itemId") Long itemId,  @AuthenticationPrincipal LoginMember loginMember, HttpServletRequest request){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
+        Item findOne = itemService.findById(itemId);
         return new ResponseEntity<>(ApiUtils.success(roomService.findByItemList(findOne)),HttpStatus.OK);
     }
-    @GetMapping("/search")
+    @GetMapping("items/search")
     public ResponseEntity<?> searchItems(@RequestParam String keyword, @AuthenticationPrincipal LoginMember loginMember) {
         List<SearchDto> firstList = itemService.searchItems(keyword);
         List<SearchDto> secondList = tagService.searchItems(keyword);
@@ -126,17 +123,17 @@ public class HomeController {
      }
     }
      */
-    @PostMapping("/item/room/make") //해당 아이템에 방 생성하기
-    public ResponseEntity<?> makeRoom(@RequestBody MakeRoomReqDto makeRoomReqDto, @RequestBody String jsonString, HttpServletRequest request, @AuthenticationPrincipal LoginMember loginMember) throws JsonProcessingException {
+    @PostMapping("/items/{itemId}/rooms") //해당 아이템에 방 생성하기
+    public ResponseEntity<?> createRoom(@PathVariable("itemId")Long itemId, @RequestBody MakeRoomReqDto makeRoomReqDto, @AuthenticationPrincipal LoginMember loginMember) throws JsonProcessingException {
         List<Question> questionsPS = questionService.makeQuestion(makeRoomReqDto);
-        MakeRoomRespDto makeRoomRespDto = roomService.makeRoom(makeRoomReqDto, loginMember.getMember(), questionsPS);
+        MakeRoomRespDto makeRoomRespDto = roomService.makeRoom(itemId, makeRoomReqDto, loginMember.getMember(), questionsPS);
 
         return new ResponseEntity<>(ApiUtils.success(makeRoomRespDto),HttpStatus.CREATED);
     }
 
-    @GetMapping("/item/room/apply") //해당 아이템에 지원하기 위해 설문 양식 질문 보기
-    public ResponseEntity<?> applyRoom(HttpServletRequest request, @AuthenticationPrincipal LoginMember loginMember){
-        Room roomPS = roomService.findById(Long.valueOf(request.getHeader("roomId")));
+    @GetMapping("/items/{itemId}/rooms/{roomId}/applications") //해당 아이템에 지원하기 위해 설문 양식 질문 보기
+    public ResponseEntity<?> viewApplicationForm(@PathVariable("itemId")Long itemId, @PathVariable("roomId") Long roomId, @AuthenticationPrincipal LoginMember loginMember){
+        Room roomPS = roomService.findByRoomIdAndItemId(roomId, itemId);
         QuestionMapDto questions = questionService.findQuestions(roomPS.getSurvey());
         return new ResponseEntity<>(ApiUtils.success(questions),HttpStatus.OK);
     }
@@ -147,34 +144,18 @@ public class HomeController {
 }
  */
     //TODO 테스트해야함
-    @PostMapping("/item/room/apply/complete") //설문 답변 달고 지원 완료하기
-    public ResponseEntity<String> applyComplete(@RequestBody String jsonString, HttpServletRequest request) throws JsonProcessingException {
 
-        Long roomId = Long.valueOf(request.getHeader("roomId"));
-        String memberId = request.getHeader("memberId");
+    @PostMapping("/items/{itemId}/rooms/{roomId}/applications") //설문 답변 달고 지원 완료하기
+    public ResponseEntity<?> applyComplete(@PathVariable("itemId")Long itemId, @PathVariable("roomId")Long roomId, @RequestBody QuestionAnswerListDto questionAnswerListDto, @AuthenticationPrincipal LoginMember loginMember) throws JsonProcessingException {
 
-        Room findRoom = roomService.findById(roomId);
-        Member findMember = memberService.findById(memberId);
+        Room findRoom = roomService.findByRoomIdAndItemId(roomId, itemId);
+        Member findMember = loginMember.getMember();
 
         if(findRoom.getMember() == findMember) return ResponseEntity.badRequest().body("직접 생성한 방에는 지원할 수 없습니다.");
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(jsonString);
-        List<Answer> answers = new LinkedList<>();
-        Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
+        surveyAnswerService.applyRoom(questionAnswerListDto, findRoom, findMember);
 
-        while(fields.hasNext()){
-            Map.Entry<String, JsonNode> field = fields.next();
-            Long questionId = Long.valueOf(field.getKey());
-            String reply = field.getValue().asText();
-            Answer answer = Answer.create(questionService.findById(questionId), reply);
-            answerService.save(answer);
-            answers.add(answer);
-        }
-
-        SurveyAnswer surveyAnswer = SurveyAnswer.create(findRoom, findMember, answers);
-        surveyAnswerService.save(surveyAnswer);
-        return ResponseEntity.ok("success");
+        return new ResponseEntity<>(ApiUtils.success("success"), HttpStatus.OK);
     }
 
 }

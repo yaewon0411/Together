@@ -1,4 +1,4 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.roomMember;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

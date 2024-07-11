@@ -2,7 +2,7 @@ package together.capstone2together.dto.memberTag;
 
 import lombok.Builder;
 import lombok.Data;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.tag.Tag;
 import together.capstone2together.domain.member.Member;
 
 public class MemberTagReqDto {

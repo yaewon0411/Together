@@ -1,7 +1,8 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.survey;
 
 import jakarta.persistence.*;
 import lombok.*;
+import together.capstone2together.domain.question.Question;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -26,9 +26,9 @@ public class AIController {
     private final InterestService interestService;
 
     //해당 유저에게 추천된 아이템 중 랜덤으로 하나 출력 -> ai가 추천한 데이터가 있어야 함. 데이터 없을 시는 어떻게?
-    @GetMapping
-    public ResponseEntity<?> showItemByAi(HttpServletRequest request){
-        Member findOne = memberService.findById(request.getHeader("memberId"));
+    @GetMapping("/{memberId}")
+    public ResponseEntity<?> showItemByAi(@PathVariable("memberId")String memberId){
+        Member findOne = memberService.findById(memberId);
         Item findItem = aiService.getOne(findOne);
         ItemInfoRespDto itemInfoRespDto = itemService.showItemInfo(findItem.getId());
         return new ResponseEntity<>(ApiUtils.success(itemInfoRespDto), HttpStatus.OK);

@@ -8,15 +8,19 @@ public class MemberRespDto {
 
 
     @Data
-    @Builder
+    @NoArgsConstructor
     public static class MyInfoRespDto{
         private int point;
         private String name;
         private int createdRoomCnt;
         private int applyRoomCnt;
 
-        public MyInfoRespDto() {
-
+        @Builder
+        public MyInfoRespDto(int point, String name, int createdRoomCnt, int applyRoomCnt) {
+            this.point = point;
+            this.name = name;
+            this.createdRoomCnt = createdRoomCnt;
+            this.applyRoomCnt = applyRoomCnt;
         }
     }
 

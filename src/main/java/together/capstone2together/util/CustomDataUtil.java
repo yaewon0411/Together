@@ -1,12 +1,7 @@
 package together.capstone2together.util;
 
-import com.nimbusds.jose.shaded.json.JSONObject;
-import lombok.Builder;
-import lombok.Data;
-import together.capstone2together.domain.SurveyAnswer;
-import together.capstone2together.domain.item.Item;
+import together.capstone2together.domain.surveyAnswer.SurveyAnswer;
 import together.capstone2together.domain.member.Member;
-import together.capstone2together.dto.member.MemberRespDto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,16 +22,6 @@ public class CustomDataUtil {
     }
 
 
-    public static Object makeObject(Item item, JSONObject object, int joinedNumber) {
-        object.put("title", item.getTitle());
-        object.put("itemId",item.getId());
-        object.put("sponsor",item.getSponsor());
-        object.put("views",item.getViews());
-        object.put("img",item.getImg());
-        object.put("Dday",makeDday(item.getDeadline()));
-        object.put("JoinedNumber",joinedNumber+1);
-        return object;
-    }
 
     private static String makeToday() {
         LocalDate currentDate = LocalDate.now();

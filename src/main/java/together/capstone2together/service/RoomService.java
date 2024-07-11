@@ -1,28 +1,28 @@
 package together.capstone2together.service;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.Question;
-import together.capstone2together.domain.SurveyAnswer;
-import together.capstone2together.domain.answer.Answer;
+import together.capstone2together.domain.question.Question;
+import together.capstone2together.domain.surveyAnswer.SurveyAnswer;
 import together.capstone2together.domain.answer.AnswerRepository;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.item.ItemRepository;
 import together.capstone2together.domain.member.Member;
-import together.capstone2together.domain.Survey;
+import together.capstone2together.domain.survey.Survey;
 import together.capstone2together.domain.room.Room;
 import together.capstone2together.domain.room.RoomRepository;
 import together.capstone2together.ex.CustomApiException;
-import together.capstone2together.repository.QuestionRepository;
-import together.capstone2together.repository.RoomMemberRepository;
-import together.capstone2together.repository.SurveyAnswerRepository;
-import together.capstone2together.repository.SurveyRepository;
+import together.capstone2together.domain.question.QuestionRepository;
+import together.capstone2together.domain.roomMember.RoomMemberRepository;
+import together.capstone2together.domain.surveyAnswer.SurveyAnswerRepository;
+import together.capstone2together.domain.survey.SurveyRepository;
 import together.capstone2together.util.CustomDateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import static together.capstone2together.dto.item.ItemRespDto.*;
 import static together.capstone2together.dto.room.RoomReqDto.*;
 import static together.capstone2together.dto.room.RoomRespDto.*;
@@ -41,19 +41,19 @@ public class RoomService {
     private final SurveyAnswerRepository surveyAnswerRepository;
     private final QuestionRepository  questionRepository;
 
-    //방 생성
-    @Transactional
-    public void save (Room room){
-        validateDuplicatedRoom(room);
-        roomRepository.save(room);
-    }
 
     //중복 방 생성 검사
-    private void validateDuplicatedRoom(Room room) {
-        //회원 아이디 찾고
-        List<Room> findList = roomRepository.findByMemberAndItem(room.getItem(), room.getMember());
-        //그 회원이 동일 아이템에 대해 생성한 방이 있는지
-        if(findList.size()!=0) throw new CustomApiException("이미 생성한 방이 존재합니다");
+    private void validateDuplicatedRoom(Item item, Member member) {
+
+        roomRepository.findByMemberAndItem(item, member).orElseThrow(
+                () -> new CustomApiException("해당 대외활동에 생성한 방이 존재합니다.")
+        );
+    }
+    public Room findById(Long roomId){
+        Room roomPS = roomRepository.findById(roomId).orElseThrow(() ->
+            new CustomApiException("존재하는 방이 없습니다")
+        );
+        return roomPS;
     }
 
     //아이템에 생성된 방 리스트 보기
@@ -129,9 +129,7 @@ public class RoomService {
             surveyAnswersPS.stream()
                     .map(SurveyAnswer::getAnswers)
                     .forEach(
-                            sa -> {
-                                answerRepository.deleteAll(sa);
-                            }
+                            answerRepository::deleteAll
                     );
         }
         //모든 사용자 설문 총 답변 삭제
@@ -157,11 +155,18 @@ public class RoomService {
         if(findOne.getCapacity() == count) return true;
         else return false;
     }
-    public Room findById(Long itemId){
-        return roomRepository.findById(itemId)
-                .orElseThrow(
-                        () -> new CustomApiException("존재하지 않는 방입니다")
-                );
+    public Room findByRoomIdAndItemId(Long roomId, Long itemId){
+
+        //해당 대회활동이 존재하는 지 검사
+        Item itemPS = itemRepository.findById(itemId).orElseThrow(
+                () -> new CustomApiException("존재하지 않는 대외활동 입니다")
+        );
+
+        Room roomPS = roomRepository.findByItem(itemPS).orElseThrow(
+                () -> new CustomApiException("존재하지 않는 방입니다")
+        );
+
+        return roomPS;
     }
 
     public int getRoomCountInItem(Item item){
@@ -183,14 +188,7 @@ public class RoomService {
 	"itemId" : "아이템 아이디"
      }
      */
-//    public Room makeRoom(Item item, Member member, Survey survey, JsonNode roomNode) {
-//        String title = roomNode.get("title").asText();
-//        String content = roomNode.get("content").asText();
-//        String city = roomNode.get("city").asText();
-//        int capacity = roomNode.get("capacity").asInt();
-//        Room room = Room.create(item, member, title, content, capacity, city, survey);
-//        return room;
-//    }
+
 
 
 
@@ -201,18 +199,22 @@ public class RoomService {
     }
 
     @Transactional
-    public MakeRoomRespDto makeRoom(MakeRoomReqDto makeRoomReqDto, Member member, List<Question> questions) {
+    public MakeRoomRespDto makeRoom(Long itemId, MakeRoomReqDto makeRoomReqDto, Member member, List<Question> questions) {
 
         //설문 조사 저장
         Survey surveyPS = surveyRepository.save(new Survey(questions));
 
         //대외활동 찾기
-        Item itemPS = itemRepository.findById(makeRoomReqDto.getMakeRoomDto().getItemId())
+        Item itemPS = itemRepository.findById(itemId)
                 .orElseThrow(
                         () -> new CustomApiException("존재하지 않는 대외활동 입니다")
                 );
 
-        Room roomPS = roomRepository.save(Room.create(itemPS, member,
+        //사용자가 해당 대외활동에 이미 방을 생성했는지 확인하기
+        validateDuplicatedRoom(itemPS, member);
+
+        //방 생성하기
+        Room roomPS = roomRepository.save(new Room (itemPS, member,
                         makeRoomReqDto.getMakeRoomDto().getTitle(),
                         makeRoomReqDto.getMakeRoomDto().getContent(),
                         makeRoomReqDto.getMakeRoomDto().getCapacity(),

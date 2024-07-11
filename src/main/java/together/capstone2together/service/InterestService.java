@@ -1,19 +1,17 @@
 package together.capstone2together.service;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.*;
 import together.capstone2together.domain.interest.Interest;
 import together.capstone2together.domain.item.Item;
 import together.capstone2together.domain.item.ItemRepository;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.member.MemberRepository;
-import together.capstone2together.dto.interest.InterestReqDto;
+import together.capstone2together.domain.pick.Pick;
 import together.capstone2together.ex.CustomApiException;
 import together.capstone2together.domain.interest.InterestRepository;
-import together.capstone2together.repository.PickRepository;
+import together.capstone2together.domain.pick.PickRepository;
 
 import java.util.Optional;
 

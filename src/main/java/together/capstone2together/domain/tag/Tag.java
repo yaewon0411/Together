@@ -1,4 +1,4 @@
-package together.capstone2together.domain;
+package together.capstone2together.domain.tag;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

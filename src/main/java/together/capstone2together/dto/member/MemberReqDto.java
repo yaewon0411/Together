@@ -24,6 +24,8 @@ public class MemberReqDto {
 
     @Data
     public static class ChangePwReqDto{
+        @NotEmpty
+        @Size(min = 4, max = 20)
         private String password;
 
         public ChangePwReqDto(String password) {

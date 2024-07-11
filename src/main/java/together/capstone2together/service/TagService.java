@@ -3,9 +3,9 @@ package together.capstone2together.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.tag.Tag;
 import together.capstone2together.dto.tag.TagReqDto;
-import together.capstone2together.repository.TagRepository;
+import together.capstone2together.domain.tag.TagRepository;
 
 import java.util.List;
 import java.util.Optional;

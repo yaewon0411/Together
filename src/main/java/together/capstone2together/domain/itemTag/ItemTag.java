@@ -2,7 +2,7 @@ package together.capstone2together.domain.itemTag;
 
 import jakarta.persistence.*;
 import lombok.*;
-import together.capstone2together.domain.Tag;
+import together.capstone2together.domain.tag.Tag;
 import together.capstone2together.domain.item.Item;
 
 import java.io.Serializable;
