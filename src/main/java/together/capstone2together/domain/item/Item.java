@@ -33,7 +33,7 @@ public class Item implements Serializable { //크롤링 결과 저장
     private String sponsor;//주최기관
     private String img;//이미지
     private String deadline;//마감기한 -> "yyyy-mm-dd"으로
-    private String homepage;//이거 추가할 것 -> 주최 기관 홈페이지 -> 컨트롤러에서 이것도 내보내도록 수정해야함
+    private String homepage;//주최 기관 홈페이지
     private int views; //조회수
 
     @Column(name = "event_url", unique = true, nullable = false)
