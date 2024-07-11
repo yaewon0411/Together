@@ -3,6 +3,7 @@ package together.capstone2together.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import together.capstone2together.controller.TeamMemberController;
 import together.capstone2together.domain.*;
 import together.capstone2together.domain.answer.Answer;
 import together.capstone2together.domain.answer.AnswerRepository;
@@ -14,6 +15,7 @@ import together.capstone2together.domain.roomMember.RoomMember;
 import together.capstone2together.domain.survey.Survey;
 import together.capstone2together.domain.surveyAnswer.SurveyAnswer;
 import together.capstone2together.dto.room.RoomDto;
+import together.capstone2together.dto.surveyAnswer.SurveyAnswerReqDto;
 import together.capstone2together.ex.CustomApiException;
 import together.capstone2together.domain.question.QuestionRepository;
 import together.capstone2together.domain.roomMember.RoomMemberRepository;
@@ -26,6 +28,7 @@ import java.util.Optional;
 
 import static together.capstone2together.dto.question.QuestionRespDto.*;
 import static together.capstone2together.dto.question.QuestionRespDto.QuestionAnswerListDto.*;
+import static together.capstone2together.dto.surveyAnswer.SurveyAnswerReqDto.*;
 import static together.capstone2together.dto.surveyAnswer.SurveyAnswerRespDto.*;
 import static together.capstone2together.dto.surveyAnswer.SurveyAnswerRespDto.AppliedMemberRespDto.*;
 
@@ -68,7 +71,7 @@ public class SurveyAnswerService {
         return surveyAnswerRepository.findByMemberExcludeFailSurvey(member);
     }
 
-    //팀장 탭 - 방을 눌렀을 때 지원한 회원 리스트 뽑기 (방에 지원한 시간 LocalDateTime이라서 String이랑 맵핑이 까다롭네...
+    //팀장 탭 - 방을 눌렀을 때 지원한 회원 리스트 뽑기
     public AppliedMemberRespDto getAppliedMemberList(Room room){
 
         AppliedMemberRespDto response = new AppliedMemberRespDto();
@@ -100,6 +103,11 @@ public class SurveyAnswerService {
         }
         return response;
     }
+    public Object surveyAnswerStatus(Long surveyAnswerId, Member member, SurveyStatusReqDto surveyStatusReqDto){
+        if(surveyStatusReqDto.getStatus().equals("pass")) return makeAnswerToPass(surveyAnswerId, member);
+        else return makeAnswerToFail(surveyAnswerId, member);
+
+    }
 
     @Transactional
     public MakeAnswerToPassRespDto makeAnswerToPass(Long surveyAnswerId, Member member) {
@@ -129,13 +137,6 @@ public class SurveyAnswerService {
     }
 
 
-    //답변에 fail 기능 내리기
-    @Transactional
-    public void setStatusToFail(Long id){
-        SurveyAnswer surveyAnswer = surveyAnswerRepository.findById(id).get();
-        if(surveyAnswer.getStatus() == Status.WAITING)
-            surveyAnswer.setStatus(Status.FAIL);
-    }
     //회원 아이디랑 방 아이디로 설문 답변 찾기
     public List<SurveyAnswerReplyRespDto> findByMemberId(String appliedMemberId, Long roomId) {
         List<SurveyAnswerReplyRespDto> response = new ArrayList<>();
@@ -156,7 +157,7 @@ public class SurveyAnswerService {
 
 
     @Transactional
-    public void makeAnswerToFail(Long surveyAnswerId, Member member) {
+    public MakeAnswerToFailRespDto makeAnswerToFail(Long surveyAnswerId, Member member) {
 
         //설문 답변 조회
         SurveyAnswer surveyAnswerPS = surveyAnswerRepository.findById(surveyAnswerId).orElseThrow(
@@ -174,6 +175,8 @@ public class SurveyAnswerService {
             throw new CustomApiException("이미 Pass 판정을 내린 답변입니다");
 
         surveyAnswerPS.setStatus(Status.FAIL);
+
+        return new MakeAnswerToFailRespDto(surveyAnswerPS.getStatus());
     }
 
     public void applyRoom(QuestionAnswerListDto questionAnswerListDto, Room room, Member member) {

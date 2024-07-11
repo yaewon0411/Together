@@ -4,7 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import together.capstone2together.config.auth.LoginMember;
 import together.capstone2together.domain.member.Member;
 import together.capstone2together.domain.surveyAnswer.SurveyAnswer;
 import together.capstone2together.service.MemberService;
@@ -35,8 +37,8 @@ public class MyController {
 
     //포인트 조회, 개설한 방 수, 지원한 방 수(waiting, pass), 닉네임(name), 아이디 내보내기
     @GetMapping
-    public ResponseEntity<?> myInfo(HttpServletRequest request){
-        Member findMember = memberService.findById(request.getHeader("memberId"));
+    public ResponseEntity<?> myInfo(@AuthenticationPrincipal LoginMember loginMember){
+        Member findMember = memberService.findById(loginMember.getMember().getId());
         List<SurveyAnswer> findAnswerList = surveyAnswerService.findByMemberExcludeFailSurvey(findMember);
 
         MemberRespDto.MyInfoRespDto myInfoRespDto = CustomDataUtil.makeMyInfo(findMember, findAnswerList);
@@ -47,9 +49,9 @@ public class MyController {
     태그 리스트 재설정
         {"tags": ["기술", "예술", "여행"]}
      */
-    @PutMapping("/tags")
-    public ResponseEntity<?> changeInterestedTag(@RequestBody TagListReqDto tagListReqDto, HttpServletRequest request){
-        Member findMember = memberService.findById(request.getHeader("memberId"));
+    @PatchMapping("/tags")
+    public ResponseEntity<?> changeInterestedTag(@RequestBody TagListReqDto tagListReqDto, @AuthenticationPrincipal LoginMember loginMember){
+        Member findMember = memberService.findById(loginMember.getMember().getId());
         // tag 저장
         tagListReqDto.getTagList().stream().map(tagName -> tagService.save(new TagReqDto(tagName)));
         //memberTag 수정
@@ -58,23 +60,22 @@ public class MyController {
        return new ResponseEntity<>(ApiUtils.success("관심 태그 변경 완료"), HttpStatus.OK);
     }
 
-    @PostMapping("/pw") //비밀번호 재설정
-    public ResponseEntity<?> changePw(HttpServletRequest request, @RequestBody ChangePwReqDto changePwReqDto){
-        String memberId = request.getHeader("memberId");
-        memberService.changePw(memberService.findById(memberId), changePwReqDto);
+    @PatchMapping("/pw") //비밀번호 재설정
+    public ResponseEntity<?> changePw(@AuthenticationPrincipal LoginMember loginMember, @RequestBody ChangePwReqDto changePwReqDto){
+        memberService.changePw(memberService.findById(loginMember.getMember().getId()), changePwReqDto);
         return new ResponseEntity<>(ApiUtils.success("비밀번호 변경 완료"),HttpStatus.OK);
     }
-    @PostMapping("/kakaotalkId")
-    public ResponseEntity<?> changeKakaotalkId(HttpServletRequest request, @RequestBody ChangeKakaotalkIdReqDto changeKakaotalkIdDto){
-        Member findOne = memberService.findById(request.getHeader("memberId"));
+    @PatchMapping("/kakaotalkId")
+    public ResponseEntity<?> changeKakaotalkId(@AuthenticationPrincipal LoginMember loginMember, @RequestBody ChangeKakaotalkIdReqDto changeKakaotalkIdDto){
+        Member findOne = memberService.findById(loginMember.getMember().getId());
         ChangeKakaotalkIdRespDto changeKakaotalkIdRespDto = memberService.changeKakaotalkId(findOne, changeKakaotalkIdDto);
         return new ResponseEntity<>(ApiUtils.success(changeKakaotalkIdRespDto),HttpStatus.OK);
     }
 
     //관심있는 활동 -> pick 한 아이템들 리스트로 내보내기
-    @GetMapping("/pick")
-    public ResponseEntity<?> getPickItems(HttpServletRequest request){
-        Member findOne = memberService.findById(request.getHeader("memberId"));
+    @GetMapping("/picks")
+    public ResponseEntity<?> getPickItems(@AuthenticationPrincipal LoginMember loginMember){
+        Member findOne = memberService.findById(loginMember.getMember().getId());
         return new ResponseEntity<>(ApiUtils.success(pickService.getPickItemList(findOne)), HttpStatus.OK);
     }
 

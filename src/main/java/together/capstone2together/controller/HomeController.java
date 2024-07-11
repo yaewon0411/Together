@@ -42,15 +42,14 @@ public class HomeController {
     private final QuestionService questionService;
     private final PickService pickService;
     private final TagService tagService;
-    private final AnswerService answerService;
 
     @GetMapping("/popular") //실시간 인기 활동
-    public ResponseEntity<?> getPopularItem(@AuthenticationPrincipal LoginMember loginMember){
+    public ResponseEntity<?> getPopularItem(){
         List<Top20ViewsRespDto> top20Views = itemService.getTop20Views();
         return new ResponseEntity<>(ApiUtils.success(top20Views),HttpStatus.OK);
     }
     @GetMapping("/imminent-deadline") //마감 직전 활동
-    public ResponseEntity<?> getImminentDeadLine(@AuthenticationPrincipal LoginMember loginMember){
+    public ResponseEntity<?> getImminentDeadLine(){
         List<ImminentDeadlineRespDto> imminentDeadline = itemService.getImminentDeadline();
         return new ResponseEntity<>(ApiUtils.success(imminentDeadline),HttpStatus.OK);
     }
@@ -70,12 +69,12 @@ public class HomeController {
 
 
     @GetMapping("/items/{itemId}") //홈 화면에서 특정 아이템 누르면 그 아이템의 상세 정보가 나오도록
-    public ResponseEntity<?> getItemInfo(@PathVariable("itemId") Long itemId, @AuthenticationPrincipal LoginMember loginMember){
+    public ResponseEntity<?> getItemInfo(@PathVariable("itemId") Long itemId){
         ItemInfoRespDto itemInfoRespDto = itemService.showItemInfo(itemId);
         return new ResponseEntity<>(ApiUtils.success(itemInfoRespDto),HttpStatus.OK);
     }
     @PostMapping("/items/pick") //아이템 pick 하기 (클라이언트측에서 서버로 pick 여부 전달)
-    public ResponseEntity<?> itemPick(@RequestBody ItemPickReqDto itemPickReqDto, HttpServletRequest request, @AuthenticationPrincipal LoginMember loginMember){
+    public ResponseEntity<?> itemPick(@RequestBody ItemPickReqDto itemPickReqDto, @AuthenticationPrincipal LoginMember loginMember){
         if(itemPickReqDto.getStatus().equals("true")) {//pick 값은 true 아니면 false (String)
             Member memberPS = memberService.findById(loginMember.getUsername());
             Item itemPS = itemService.findById(itemPickReqDto.getItemId());
@@ -85,12 +84,12 @@ public class HomeController {
     }
 
     @GetMapping("/items/{itemId}/rooms") //해당 아이템에 생성된 방들 불러오기
-    public ResponseEntity<?> getAllRoom(@PathVariable("itemId") Long itemId,  @AuthenticationPrincipal LoginMember loginMember, HttpServletRequest request){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
+    public ResponseEntity<?> getAllRoom(@PathVariable("itemId") Long itemId){ //ResponseEntity<JSONArray>로 반환형 바꿔서 테스트해보기
         Item findOne = itemService.findById(itemId);
         return new ResponseEntity<>(ApiUtils.success(roomService.findByItemList(findOne)),HttpStatus.OK);
     }
     @GetMapping("items/search")
-    public ResponseEntity<?> searchItems(@RequestParam String keyword, @AuthenticationPrincipal LoginMember loginMember) {
+    public ResponseEntity<?> searchItems(@RequestParam String keyword) {
         List<SearchDto> firstList = itemService.searchItems(keyword);
         List<SearchDto> secondList = tagService.searchItems(keyword);
         firstList.addAll(secondList);
@@ -132,7 +131,7 @@ public class HomeController {
     }
 
     @GetMapping("/items/{itemId}/rooms/{roomId}/applications") //해당 아이템에 지원하기 위해 설문 양식 질문 보기
-    public ResponseEntity<?> viewApplicationForm(@PathVariable("itemId")Long itemId, @PathVariable("roomId") Long roomId, @AuthenticationPrincipal LoginMember loginMember){
+    public ResponseEntity<?> viewApplicationForm(@PathVariable("itemId")Long itemId, @PathVariable("roomId") Long roomId){
         Room roomPS = roomService.findByRoomIdAndItemId(roomId, itemId);
         QuestionMapDto questions = questionService.findQuestions(roomPS.getSurvey());
         return new ResponseEntity<>(ApiUtils.success(questions),HttpStatus.OK);

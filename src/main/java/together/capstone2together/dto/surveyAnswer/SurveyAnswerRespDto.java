@@ -15,6 +15,17 @@ import java.util.List;
 
 public class SurveyAnswerRespDto {
 
+
+    @Data
+    @NoArgsConstructor
+    public static class MakeAnswerToFailRespDto{
+        private String status;
+
+        public MakeAnswerToFailRespDto(Status status) {
+            this.status = status.toString();
+        }
+    }
+
     @Data
     @NoArgsConstructor
     public static class MakeAnswerToPassRespDto{
